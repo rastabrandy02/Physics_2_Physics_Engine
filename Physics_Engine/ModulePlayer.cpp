@@ -19,6 +19,9 @@ bool ModulePlayer::Start()
 	playerBody->position.x = 30;
 	playerBody->position.y = SCREEN_HEIGHT - 160;
 	playerBody->rec = {((int) playerBody->position.x - 25),((int) playerBody->position.y -25), 50, 50 };
+	playerBody->mass = 10;
+	playerBody->restitutionCoeff = 0.5f;
+	playerBody->frictionCoeff = 0.008f;
 	return true;
 }
 
@@ -35,13 +38,18 @@ update_status ModulePlayer::PreUpdate()
 {
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		playerBody->position.x += speed;
+		playerBody->velocity.x += speed;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		playerBody->position.x -= speed;
+		playerBody->velocity.x -= speed;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) playerBody->position.y = 200;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		playerBody->acceleration.y -= 20.0f;
+		
+	}
+		
 	
 	return UPDATE_CONTINUE;
 }
@@ -49,13 +57,14 @@ update_status ModulePlayer::Update()
 {
 	
 	
-	//if (position.x > 400) position.x = 0;
+	
 	return UPDATE_CONTINUE;
 }
 update_status ModulePlayer::PostUpdate()
 {
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 255);
 	SDL_RenderFillRect(App->renderer->renderer, &playerBody->rec);
+	
 	return UPDATE_CONTINUE;
 }
 

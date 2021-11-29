@@ -21,9 +21,15 @@ public:
 	
 
 	void ComputeKinematics();
+	void ComputeFriction();
+
 	void AdjustSprite();
+	void LimitSpeed(float limitX, float limitY);
 	
 	int mass;
+	float restitutionCoeff;
+	float frictionCoeff;
+
 	BodyType type;
 	SDL_Rect rec;
 	p2Point<float> position;

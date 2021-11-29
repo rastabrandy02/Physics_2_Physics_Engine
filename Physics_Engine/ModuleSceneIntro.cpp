@@ -25,11 +25,23 @@ bool ModuleSceneIntro::Start()
 	 ground->rec = { 0, SCREEN_HEIGHT - 100, SCREEN_WIDTH, 150 };
 	 App->physics->bodies.add(ground);
 
-	 test = new PhysBody(BODY_RECTANGLE);
-	 test->position.x = 50;
-	 test->position.y = 50;
-	 test->rec = { (int)test->position.x,(int) test->position.y, 20,20 };
-	 App->physics->bodies.add(test);
+	 test01 = new PhysBody(BODY_RECTANGLE);
+	 test01->position.x = 120;
+	 test01->position.y = 50;
+	 test01->rec = { (int)test01->position.x,(int) test01->position.y, 20,20 };
+	 test01->mass = 3;
+	 test01->restitutionCoeff = 0.7f;
+	 test01->frictionCoeff = 0.009f;
+	 App->physics->bodies.add(test01);
+
+	 test02 = new PhysBody(BODY_RECTANGLE);
+	 test02->position.x = 400;
+	 test02->position.y = 50;
+	 test02->rec = { (int)test02->position.x,(int)test02->position.y, 80,80 };
+	 test02->mass = 15;
+	 test02->restitutionCoeff = 0.5f;
+	 test02->frictionCoeff = 0.006f;
+	 App->physics->bodies.add(test02);
 	/* plantPos.x = 200;
 	 plantPos.y = SCREEN_HEIGHT - 175;
 	 plant = { plantPos.x, plantPos.y, 10, 75 };*/
@@ -49,20 +61,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::PreUpdate()
 {
-	/*if (App->player->position.DistanceTo(plantPos) < 70)
-	{
-		plant.y = SCREEN_HEIGHT - 185;
-	}
-	if (App->player->position.DistanceTo(plantPos) < 100 && App->player->position.DistanceTo(plantPos) > 70)
-	{
-		plant.y = SCREEN_HEIGHT - 180;
-	}
-	if (App->player->position.DistanceTo(plantPos) >= 100)
-	{
-		plant.y = SCREEN_HEIGHT - 175;
-	}*/
-	/*plant.x = plantPos.x;
-	plant.y = plantPos.y;*/
+	
 	
 	return UPDATE_CONTINUE;
 }
@@ -78,6 +77,8 @@ update_status ModuleSceneIntro::PostUpdate()
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 255);
 	SDL_RenderFillRect(App->renderer->renderer, &ground->rec);
 	SDL_SetRenderDrawColor(App->renderer->renderer, 0, 255, 0, 255);
-	SDL_RenderFillRect(App->renderer->renderer, &test->rec);
+	SDL_RenderFillRect(App->renderer->renderer, &test01->rec);
+	SDL_SetRenderDrawColor(App->renderer->renderer, 135, 0, 100, 255);
+	SDL_RenderFillRect(App->renderer->renderer, &test02->rec);
 	return UPDATE_CONTINUE;
 }

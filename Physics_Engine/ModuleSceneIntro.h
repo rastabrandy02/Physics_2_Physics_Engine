@@ -24,7 +24,8 @@ public:
 public:
 
 	PhysBody* ground;
-	PhysBody* test;
+	PhysBody* test01;
+	PhysBody* test02;
 	//SDL_Rect ground;
 	SDL_Rect plant;
 

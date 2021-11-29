@@ -18,7 +18,8 @@ ModulePhysics::~ModulePhysics()
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
-
+	speedLimit.x = 10.0f;
+	speedLimit.y = 20.0f;
 	
 	return true;
 }
@@ -28,23 +29,156 @@ update_status ModulePhysics::PreUpdate()
 {
 	for (p2List_item<PhysBody*>* item = bodies.getFirst(); item; item = item->next)
 	{
-		//Gravity
+		//---Gravity---
 		if (item->data->type != BODY_GROUND)
 		{
 			if ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
 			{
-				item->data->acceleration.y = 1.0f;
+				item->data->acceleration.y = gravity * item->data->mass;
 				
 				
 			}
 			else
 			{
-				item->data->acceleration.SetToZero();
-				item->data->velocity.SetToZero();
+				if (item->data->velocity.y > 0.0f)
+				{
+					item->data->acceleration.y = 0.0f;
+					item->data->velocity.y = 0.0f;
+				}
+				
 				item->data->position.y = App->scene_intro->ground->rec.y - item->data->rec.h / 2;
+				item->data->ComputeFriction();
 			}
+			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			item->data->ComputeKinematics();
 		}
+
+		//---Collisions---
+		
+		
+		switch (item->data->type)
+		{
+			case BODY_RECTANGLE:
+			{
+				for (p2List_item<PhysBody*>* pb = bodies.getFirst(); pb; pb = pb->next)
+				{
+					switch (pb->data->type)
+					{
+						case BODY_RECTANGLE:
+						{
+							//Solve attaching problems
+							if ((item->data->position.x < pb->data->position.x) && (item->data->position.x + item->data->rec.w / 2> pb->data->position.x - pb->data->rec.w /2))
+							{
+								if ((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h) &&
+									item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h)
+								{
+									item->data->position.x--;
+									pb->data->position.x++;
+								}
+								
+								if ((item->data->position.y < pb->data->position.y) && (item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h / 2))
+								{
+									item->data->position.y--;
+									pb->data->position.y++;
+								}
+								if ((item->data->position.y > pb->data->position.y) && (item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2))
+								{
+									item->data->position.y++;
+									pb->data->position.y--;
+								}
+							}
+							if ((item->data->position.x > pb->data->position.x) && (item->data->position.x - item->data->rec.w /2< pb->data->position.x + pb->data->rec.w/2))
+							{
+								if ((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h) &&
+									item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h)
+								{
+									item->data->position.x++;
+									pb->data->position.x--;
+								}
+								
+								if ((item->data->position.y < pb->data->position.y) && (item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h / 2))
+								{
+									item->data->position.y--;
+									pb->data->position.y++;
+								}
+								if ((item->data->position.y > pb->data->position.y) && (item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2))
+								{
+									item->data->position.y++;
+									pb->data->position.y--;
+								}
+							}
+
+							
+							// X Axis---
+							//Bodies in the same Y position
+							if ((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2) &&
+								(item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h / 2))
+							{
+								//item at the left
+								if ((item->data->position.x + item->data->rec.w / 2 > pb->data->position.x - pb->data->rec.w / 2) &&
+									(item->data->position.x - item->data->rec.w / 2 < pb->data->position.x - pb->data->rec.w / 2))
+
+								{
+									totalMomentum.x = item->data->velocity.x * item->data->mass + pb->data->velocity.x * pb->data->mass;
+									item->data->velocity.x = (-totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
+									item->data->ComputeKinematics();
+									pb->data->velocity.x = (totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
+									pb->data->ComputeKinematics();
+
+								}
+								//item at the right
+								if ((item->data->position.x - item->data->rec.w / 2 < pb->data->position.x + pb->data->rec.w / 2) &&
+									(item->data->position.x + item->data->rec.w / 2 > pb->data->position.x + pb->data->rec.w / 2))
+								{
+									totalMomentum.x = item->data->velocity.x + pb->data->velocity.x;
+									item->data->velocity.x = (totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
+									item->data->ComputeKinematics();
+									pb->data->velocity.x = (-totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
+									pb->data->ComputeKinematics();
+								}
+
+								// Y Axis---
+								//Bodies in the same X position
+								if ((item->data->position.x - item->data->rec.w / 2 < pb->data->position.x + pb->data->rec.w / 2) &&
+									(item->data->position.x + item->data->rec.w / 2 > pb->data->position.x - pb->data->rec.w / 2))
+								{
+									//item at the top
+									if ((item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h / 2) &&
+										(item->data->position.y - item->data->rec.h / 2 < pb->data->position.y - pb->data->rec.h / 2))
+
+									{
+										totalMomentum.y = item->data->velocity.y * item->data->mass + pb->data->velocity.y * pb->data->mass;
+										item->data->velocity.y = (-totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
+										item->data->ComputeKinematics();
+										pb->data->velocity.y = (totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
+										pb->data->ComputeKinematics();
+
+									}
+									//item at the bottom
+									if ((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2) &&
+										(item->data->position.y + item->data->rec.h / 2 > pb->data->position.y + pb->data->rec.h / 2))
+									{
+										totalMomentum.y = item->data->velocity.y + pb->data->velocity.y;
+										item->data->velocity.y = (totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
+										item->data->ComputeKinematics();
+										pb->data->velocity.y = (-totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
+										pb->data->ComputeKinematics();
+									}
+								}
+								break;
+							}
+							
+						}
+						default:
+							break;
+					}
+				}
+				break;
+			}
+			default:
+				break;
+		}
+		
 	}
 
 	return UPDATE_CONTINUE;
@@ -61,27 +195,7 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
-	// Bonus code: this will iterate all objects in the world and draw the circles
-	// You need to provide your own macro to translate meters to pixels
-	/*
-	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
-	{
-		for(b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
-		{
-			switch(f->GetType())
-			{
-				case b2Shape::e_circle:
-				{
-					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
-					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
-				}
-				break;
-
-				// You will have to add more cases to draw boxes, edges, and polygons ...
-			}
-		}
-	}*/
+	
 
 	return UPDATE_CONTINUE;
 }

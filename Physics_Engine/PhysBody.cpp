@@ -1,4 +1,4 @@
-
+#include <math.h>
 #include "PhysBody.h"
 
 PhysBody::PhysBody()
@@ -33,4 +33,31 @@ void PhysBody::AdjustSprite()
 {
 	rec.x = position.x - rec.w / 2;
 	rec.y = position.y - rec.h / 2;
+}
+void PhysBody::ComputeFriction()
+{
+	if (velocity.x != 0.0f)
+	{
+		if (velocity.x > 0.0f)
+		{
+			acceleration.x =- mass * frictionCoeff;
+		}
+		if (velocity.x < 0.0f)
+		{
+			acceleration.x = mass * frictionCoeff;
+		}
+	}
+	if (velocity.x <= 0.1f && velocity.x >= -0.1f)
+	{
+		velocity.x = 0.0f;
+		acceleration.x = 0.0f;
+	}
+	
+}
+void PhysBody::LimitSpeed(float limitX, float limitY)
+{
+	if (velocity.x > limitX) velocity.x = limitX;
+	if (velocity.x < -limitX) velocity.x = -limitX;
+	if (velocity.y > limitY) velocity.y = limitY;
+	if (velocity.y < -limitY)velocity.y = -limitY;
 }

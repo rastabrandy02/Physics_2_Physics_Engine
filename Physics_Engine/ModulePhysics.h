@@ -1,4 +1,5 @@
 #pragma once
+#include "Application.h"
 #include "Module.h"
 #include "Globals.h"
 #include "PhysBody.h"
@@ -21,4 +22,10 @@ public:
 private:
 	
 	bool debug;
+	float gravity = 0.1f;
+	
+	p2Point<float>speedLimit;
+
+	p2Point<float> totalMomentum;
+	
 };

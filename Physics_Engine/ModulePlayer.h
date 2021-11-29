@@ -21,5 +21,5 @@ public:
 public:
 
 	PhysBody* playerBody;
-	int speed = 10;
+	int speed = 1;
 };
