@@ -36,23 +36,26 @@ void PhysBody::AdjustSprite()
 }
 void PhysBody::ComputeFriction()
 {
+	
 	if (velocity.x != 0.0f)
 	{
 		if (velocity.x > 0.0f)
 		{
-			acceleration.x =- mass * frictionCoeff;
+			acceleration.x = -mass * frictionCoeff;
 		}
 		if (velocity.x < 0.0f)
 		{
 			acceleration.x = mass * frictionCoeff;
 		}
 	}
-	if (velocity.x <= 0.1f && velocity.x >= -0.1f)
+	float minV = 0.9f;
+	if (velocity.x <= minV && velocity.x >= -minV)
 	{
 		velocity.x = 0.0f;
 		acceleration.x = 0.0f;
 	}
-	
+	LOG("velocity x: %f", velocity.x);
+	LOG("acceleration x; %f", acceleration.x);
 }
 void PhysBody::LimitSpeed(float limitX, float limitY)
 {

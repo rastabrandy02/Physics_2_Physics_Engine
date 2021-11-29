@@ -47,8 +47,10 @@ update_status ModulePhysics::PreUpdate()
 				}
 				
 				item->data->position.y = App->scene_intro->ground->rec.y - item->data->rec.h / 2;
-				item->data->ComputeFriction();
+				
+
 			}
+			item->data->ComputeFriction();
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			item->data->ComputeKinematics();
 		}

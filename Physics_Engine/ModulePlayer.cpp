@@ -21,7 +21,7 @@ bool ModulePlayer::Start()
 	playerBody->rec = {((int) playerBody->position.x - 25),((int) playerBody->position.y -25), 50, 50 };
 	playerBody->mass = 10;
 	playerBody->restitutionCoeff = 0.5f;
-	playerBody->frictionCoeff = 0.008f;
+	playerBody->frictionCoeff = 0.09f;
 	return true;
 }
 
