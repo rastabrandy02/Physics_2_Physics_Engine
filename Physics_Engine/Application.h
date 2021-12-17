@@ -12,6 +12,8 @@
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "Timer.h"
+#include "PerfTimer.h"
 
 class Application
 {
@@ -28,6 +30,25 @@ public:
 private:
 
 	p2List<Module*> list_modules;
+
+
+	PerfTimer* perfTimer;
+	PerfTimer* frameDuration;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+
+	uint64 frameCount = 0;
+	uint32 framesPerSecond = 0;
+	uint32 lastSecFrameCount = 0;
+
+	uint32 maxFrameRate = 60;
+
+	float averageFps = 0.0f;
+	float dt = 0.0f;
+	
+	
 
 public:
 

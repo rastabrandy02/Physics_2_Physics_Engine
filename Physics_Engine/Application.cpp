@@ -29,6 +29,10 @@ Application::Application()
 	// Player
 	AddModule(player);
 	AddModule(renderer);
+
+	perfTimer = new PerfTimer();
+	frameDuration = new PerfTimer();
+	
 }
 
 Application::~Application()
@@ -72,6 +76,12 @@ bool Application::Init()
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+	frameCount++;
+	lastSecFrameCount++;
+
+	// Calculate the dt: differential time since last frame
+	dt = frameDuration->ReadMs();
+	frameDuration->Start();
 	update_status ret = UPDATE_CONTINUE;
 	p2List_item<Module*>* item = list_modules.getFirst();
 
@@ -100,6 +110,20 @@ update_status Application::Update()
 		item = item->next;
 	}
 
+
+	if (lastSecFrameTime.Read() > 1000) {
+		lastSecFrameTime.Start();
+		framesPerSecond = lastSecFrameCount;
+		lastSecFrameCount = 0;
+		averageFps = (averageFps + framesPerSecond) / 2;
+	}
+
+	float delay = float(1000 / maxFrameRate) - frameDuration->ReadMs();
+	LOG("F: %f Delay:%f", frameDuration->ReadMs(), delay);
+
+	PerfTimer* delayt = new PerfTimer();
+	delayt->Start();
+	if (maxFrameRate > 0 && delay > 0) SDL_Delay(delay);
 	return ret;
 }
 
