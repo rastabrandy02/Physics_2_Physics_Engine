@@ -23,10 +23,12 @@ PhysBody::~PhysBody()
 {
 }
 
-void PhysBody::ComputeKinematics()
+void PhysBody::ComputeKinematics(float dt)
 {
-	velocity = velocity + acceleration;
-	position = position + velocity;
+	velocity.x = velocity.x + acceleration.x * dt;
+	velocity.y = velocity.y + acceleration.y * dt;
+	position.x = position.x + velocity.x * dt;
+	position.y = position.y + velocity.y * dt;
 	AdjustSprite();
 }
 void PhysBody::AdjustSprite()

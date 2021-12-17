@@ -20,7 +20,7 @@ public:
 	~PhysBody();
 	
 
-	void ComputeKinematics();
+	void ComputeKinematics(float dt);
 	void ComputeFriction();
 
 	void AdjustSprite();

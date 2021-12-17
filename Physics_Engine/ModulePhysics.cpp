@@ -18,14 +18,14 @@ ModulePhysics::~ModulePhysics()
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
-	speedLimit.x = 10.0f;
-	speedLimit.y = 20.0f;
+	speedLimit.x = 1000.0f;
+	speedLimit.y = 2000.0f;
 	
 	return true;
 }
 
 // 
-update_status ModulePhysics::PreUpdate()
+update_status ModulePhysics::PreUpdate(float dt)
 {
 	for (p2List_item<PhysBody*>* item = bodies.getFirst(); item; item = item->next)
 	{
@@ -52,7 +52,7 @@ update_status ModulePhysics::PreUpdate()
 			}
 			item->data->ComputeFriction();
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
-			item->data->ComputeKinematics();
+			item->data->ComputeKinematics(dt);
 		}
 
 		//---Collisions---
@@ -123,9 +123,9 @@ update_status ModulePhysics::PreUpdate()
 								{
 									totalMomentum.x = item->data->velocity.x * item->data->mass + pb->data->velocity.x * pb->data->mass;
 									item->data->velocity.x = (-totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
-									item->data->ComputeKinematics();
+									item->data->ComputeKinematics(dt);
 									pb->data->velocity.x = (totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
-									pb->data->ComputeKinematics();
+									pb->data->ComputeKinematics(dt);
 
 								}
 								//item at the right
@@ -134,9 +134,9 @@ update_status ModulePhysics::PreUpdate()
 								{
 									totalMomentum.x = item->data->velocity.x + pb->data->velocity.x;
 									item->data->velocity.x = (totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
-									item->data->ComputeKinematics();
+									item->data->ComputeKinematics(dt);
 									pb->data->velocity.x = (-totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
-									pb->data->ComputeKinematics();
+									pb->data->ComputeKinematics(dt);
 								}
 
 								// Y Axis---
@@ -151,9 +151,9 @@ update_status ModulePhysics::PreUpdate()
 									{
 										totalMomentum.y = item->data->velocity.y * item->data->mass + pb->data->velocity.y * pb->data->mass;
 										item->data->velocity.y = (-totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
-										item->data->ComputeKinematics();
+										item->data->ComputeKinematics(dt);
 										pb->data->velocity.y = (totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
-										pb->data->ComputeKinematics();
+										pb->data->ComputeKinematics(dt);
 
 									}
 									//item at the bottom
@@ -162,9 +162,9 @@ update_status ModulePhysics::PreUpdate()
 									{
 										totalMomentum.y = item->data->velocity.y + pb->data->velocity.y;
 										item->data->velocity.y = (totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
-										item->data->ComputeKinematics();
+										item->data->ComputeKinematics(dt);
 										pb->data->velocity.y = (-totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
-										pb->data->ComputeKinematics();
+										pb->data->ComputeKinematics(dt);
 									}
 								}
 								break;
@@ -187,7 +187,7 @@ update_status ModulePhysics::PreUpdate()
 }
 
 // 
-update_status ModulePhysics::PostUpdate()
+update_status ModulePhysics::PostUpdate(float dt)
 {
 	
 

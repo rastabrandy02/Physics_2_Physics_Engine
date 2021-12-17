@@ -19,7 +19,7 @@ bool ModulePlayer::Start()
 	playerBody->position.x = 30;
 	playerBody->position.y = SCREEN_HEIGHT - 160;
 	playerBody->rec = {((int) playerBody->position.x - 25),((int) playerBody->position.y -25), 50, 50 };
-	playerBody->mass = 10;
+	playerBody->mass = 100;
 	playerBody->restitutionCoeff = 0.5f;
 	playerBody->frictionCoeff = 0.09f;
 	return true;
@@ -34,7 +34,7 @@ bool ModulePlayer::CleanUp()
 }
 
 // Update: draw background
-update_status ModulePlayer::PreUpdate()
+update_status ModulePlayer::PreUpdate(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
@@ -46,21 +46,21 @@ update_status ModulePlayer::PreUpdate()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		playerBody->acceleration.y -= 20.0f;
+		playerBody->acceleration.y -= jumForce;
 		
 	}
 		
 	
 	return UPDATE_CONTINUE;
 }
-update_status ModulePlayer::Update()
+update_status ModulePlayer::Update(float dt)
 {
 	
 	
 	
 	return UPDATE_CONTINUE;
 }
-update_status ModulePlayer::PostUpdate()
+update_status ModulePlayer::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 255);
 	SDL_RenderFillRect(App->renderer->renderer, &playerBody->rec);

@@ -80,7 +80,7 @@ update_status Application::Update()
 	lastSecFrameCount++;
 
 	// Calculate the dt: differential time since last frame
-	dt = frameDuration->ReadMs();
+	dt = (frameDuration->ReadMs()) / 1000;
 	frameDuration->Start();
 	update_status ret = UPDATE_CONTINUE;
 	p2List_item<Module*>* item = list_modules.getFirst();
@@ -88,7 +88,7 @@ update_status Application::Update()
 	while(item != NULL && ret == UPDATE_CONTINUE)
 	{
 		if(item->data->IsEnabled())
-			ret = item->data->PreUpdate();
+			ret = item->data->PreUpdate(dt);
 		item = item->next;
 	}
 
@@ -97,7 +97,7 @@ update_status Application::Update()
 	while(item != NULL && ret == UPDATE_CONTINUE)
 	{
 		if(item->data->IsEnabled())
-  			ret = item->data->Update();
+  			ret = item->data->Update(dt);
 		item = item->next;
 	}
 
@@ -106,7 +106,7 @@ update_status Application::Update()
 	while(item != NULL && ret == UPDATE_CONTINUE)
 	{
 		if(item->data->IsEnabled())
-			ret = item->data->PostUpdate();
+			ret = item->data->PostUpdate(dt);
 		item = item->next;
 	}
 

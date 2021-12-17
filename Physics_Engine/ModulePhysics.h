@@ -12,8 +12,8 @@ public:
 	~ModulePhysics();
 
 	bool Start();
-	update_status PreUpdate();
-	update_status PostUpdate();
+	update_status PreUpdate(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	p2List<PhysBody*> bodies;
@@ -22,7 +22,7 @@ public:
 private:
 	
 	bool debug;
-	float gravity = 0.1f;
+	float gravity = 10.0f;
 	
 	p2Point<float>speedLimit;
 

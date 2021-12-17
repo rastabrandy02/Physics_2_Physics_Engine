@@ -13,13 +13,14 @@ public:
 	virtual ~ModulePlayer();
 
 	bool Start();
-	update_status PreUpdate();
-	update_status Update();
-	update_status PostUpdate();
+	update_status PreUpdate(float dt);
+	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 public:
 
 	PhysBody* playerBody;
-	int speed = 1;
+	int speed = 8;
+	int jumForce = 7000;
 };

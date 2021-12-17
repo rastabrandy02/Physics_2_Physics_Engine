@@ -29,7 +29,7 @@ bool ModuleSceneIntro::Start()
 	 test01->position.x = 120;
 	 test01->position.y = 50;
 	 test01->rec = { (int)test01->position.x,(int) test01->position.y, 20,20 };
-	 test01->mass = 3;
+	 test01->mass = 30;
 	 test01->restitutionCoeff = 0.7f;
 	 test01->frictionCoeff = .09f;
 	 App->physics->bodies.add(test01);
@@ -38,7 +38,7 @@ bool ModuleSceneIntro::Start()
 	 test02->position.x = 400;
 	 test02->position.y = 50;
 	 test02->rec = { (int)test02->position.x,(int)test02->position.y, 80,80 };
-	 test02->mass = 15;
+	 test02->mass = 150;
 	 test02->restitutionCoeff = 0.5f;
 	 test02->frictionCoeff = .09f;
 	 App->physics->bodies.add(test02);
@@ -59,20 +59,20 @@ bool ModuleSceneIntro::CleanUp()
 }
 
 // Update: draw background
-update_status ModuleSceneIntro::PreUpdate()
+update_status ModuleSceneIntro::PreUpdate(float dt)
 {
 	
 	
 	return UPDATE_CONTINUE;
 }
-update_status ModuleSceneIntro::Update()
+update_status ModuleSceneIntro::Update(float dt)
 {
 	
 	
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleSceneIntro::PostUpdate()
+update_status ModuleSceneIntro::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 255);
 	SDL_RenderFillRect(App->renderer->renderer, &ground->rec);
