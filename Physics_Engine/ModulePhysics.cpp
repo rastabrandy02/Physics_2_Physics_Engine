@@ -19,7 +19,7 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 	speedLimit.x = 1000.0f;
-	speedLimit.y = 2000.0f;
+	speedLimit.y = 40000.0f;
 	
 	return true;
 }

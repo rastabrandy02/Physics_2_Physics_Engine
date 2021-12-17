@@ -22,5 +22,5 @@ public:
 
 	PhysBody* playerBody;
 	int speed = 8;
-	int jumForce = 7000;
+	int jumForce = 40000;
 };

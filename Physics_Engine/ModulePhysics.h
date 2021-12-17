@@ -22,7 +22,7 @@ public:
 private:
 	
 	bool debug;
-	float gravity = 10.0f;
+	float gravity = 20.0f;
 	
 	p2Point<float>speedLimit;
 
