@@ -44,20 +44,19 @@ void PhysBody::AdjustSprite()
 	rec.x = position.x - rec.w / 2;
 	rec.y = position.y - rec.h / 2;
 }
-void PhysBody::ComputeFriction()
+void PhysBody::ComputeFriction(float frictionCoeff)
 {
+	LOG("friction active");
 	
-	if (velocity.x != 0.0f)
+	if (velocity.x > 0.0f)
 	{
-		if (velocity.x > 0.0f)
-		{
-			acceleration.x = -mass * frictionCoeff * 2;
-		}
-		if (velocity.x < 0.0f)
-		{
-			acceleration.x = mass * frictionCoeff * 2;
-		}
+		acceleration.x = -mass * frictionCoeff * 2;
 	}
+	if (velocity.x < 0.0f)
+	{
+		acceleration.x = mass * frictionCoeff * 2;
+	}
+	
 	float minV = 0.9f;
 	if (velocity.x <= minV && velocity.x >= -minV)
 	{

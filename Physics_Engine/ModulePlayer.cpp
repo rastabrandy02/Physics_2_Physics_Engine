@@ -17,11 +17,10 @@ bool ModulePlayer::Start()
 	body = new PhysBody(BODY_RECTANGLE);
 	App->physics->bodies.add(body);
 	body->position.x = 30;
-	body->position.y = SCREEN_HEIGHT - 400;
+	body->position.y = SCREEN_HEIGHT - 500;
 	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
 	body->mass = 100;
 	body->restitutionCoeff = 0.1f;
-	body->frictionCoeff = 1.f;
 	return true;
 }
 

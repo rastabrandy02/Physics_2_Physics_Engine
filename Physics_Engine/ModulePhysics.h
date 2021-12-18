@@ -29,5 +29,8 @@ private:
 	p2Point<float>speedLimit;
 
 	p2Point<float> totalMomentum;
+
+	float groundFriction = 0.9f;
+	float airFriction = 0.3f;
 	
 };

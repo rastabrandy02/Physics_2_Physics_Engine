@@ -32,13 +32,25 @@ update_status ModulePhysics::PreUpdate(float dt)
 		//---Gravity---
 		if (item->data->type != BODY_GROUND)
 		{
-			item->data->ComputeFriction();
-			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
+			LOG("v %f", App->player->body->position.x);
+			LOG("acc %f", App->player->body->acceleration.x);
+			
 			item->data->ComputeKinematics(dt);
+			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
+			bool hasTouchedFloor = false;
+			bool onGround = false;
+			if (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h / 2 <= 2)
+			{
+				hasTouchedFloor = true;
+				onGround = true;
+			}
 
-			bool hasTouchedFloor = (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2 <= 2);
-			LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
-				LOG("dist %i", item->data->rec.h);
+			if (onGround)
+				item->data->ComputeFriction(groundFriction);
+			else
+				item->data->ComputeFriction(airFriction);
+			//LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
+			//LOG("dist %i", item->data->rec.h);
 
 			if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
 			{
@@ -57,22 +69,19 @@ update_status ModulePhysics::PreUpdate(float dt)
 				
 				}
 
-				//if (item->data->velocity.y > 0.0f)
-				//{
+				item->data->acceleration.y -= item->data->acceleration.y;
+				item->data->velocity.y = 0.0f;
 				
-					item->data->acceleration.y -= item->data->acceleration.y;
 				
-					item->data->velocity.y = 0.0f;
-				//}
+
+
 				
-				LOG("true");
 			}
 			else
 			{
 				item->data->acceleration.y = gravity * item->data->mass;
 				
-				//item->data->position.y = App->scene_intro->ground->rec.y - item->data->rec.h / 2;
-				LOG("true");
+				
 
 			}
 
@@ -93,8 +102,14 @@ update_status ModulePhysics::PreUpdate(float dt)
 				{
 					switch (pb->data->type)
 					{
+						
+						break;
+
 						case BODY_RECTANGLE:
 						{
+
+							
+
 							//Solve attaching problems
 							if ((item->data->position.x < pb->data->position.x) && (item->data->position.x + item->data->rec.w / 2> pb->data->position.x - pb->data->rec.w /2))
 							{
@@ -150,9 +165,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 								{
 									totalMomentum.x = item->data->velocity.x * item->data->mass + pb->data->velocity.x * pb->data->mass;
 									item->data->velocity.x = (-totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
-									item->data->ComputeKinematics(dt);
+									//item->data->ComputeKinematics(dt);
 									pb->data->velocity.x = (totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
-									pb->data->ComputeKinematics(dt);
+									//pb->data->ComputeKinematics(dt);
 
 								}
 								//item at the right
@@ -161,9 +176,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 								{
 									totalMomentum.x = item->data->velocity.x + pb->data->velocity.x;
 									item->data->velocity.x = (totalMomentum.x / item->data->mass) * item->data->restitutionCoeff;
-									item->data->ComputeKinematics(dt);
+									//item->data->ComputeKinematics(dt);
 									pb->data->velocity.x = (-totalMomentum.x / pb->data->mass) * pb->data->restitutionCoeff;
-									pb->data->ComputeKinematics(dt);
+									//pb->data->ComputeKinematics(dt);
 								}
 
 								// Y Axis---
@@ -178,9 +193,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 									{
 										totalMomentum.y = item->data->velocity.y * item->data->mass + pb->data->velocity.y * pb->data->mass;
 										item->data->velocity.y = (-totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
-										item->data->ComputeKinematics(dt);
+										//item->data->ComputeKinematics(dt);
 										pb->data->velocity.y = (totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
-										pb->data->ComputeKinematics(dt);
+										//pb->data->ComputeKinematics(dt);
 
 									}
 									//item at the bottom
@@ -189,9 +204,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 									{
 										totalMomentum.y = item->data->velocity.y + pb->data->velocity.y;
 										item->data->velocity.y = (totalMomentum.y / item->data->mass) * item->data->restitutionCoeff;
-										item->data->ComputeKinematics(dt);
+										//item->data->ComputeKinematics(dt);
 										pb->data->velocity.y = (-totalMomentum.y / pb->data->mass) * pb->data->restitutionCoeff;
-										pb->data->ComputeKinematics(dt);
+										//pb->data->ComputeKinematics(dt);
 									}
 								}
 								break;

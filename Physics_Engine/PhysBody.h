@@ -23,7 +23,7 @@ public:
 	update_status PostUpdate(float dt);
 
 	void ComputeKinematics(float dt);
-	void ComputeFriction();
+	void ComputeFriction(float frictionCoeff);
 
 	void AdjustSprite();
 	void LimitSpeed(float limitX, float limitY);
@@ -39,7 +39,7 @@ public:
 
 	int mass;
 	float restitutionCoeff;
-	float frictionCoeff;
+	
 
 	BodyType type;
 	SDL_Rect rec;

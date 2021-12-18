@@ -119,7 +119,7 @@ update_status Application::Update()
 	}
 
 	float delay = float(1000 / maxFrameRate) - frameDuration->ReadMs();
-	LOG("F: %f Delay:%f", frameDuration->ReadMs(), delay);
+	//LOG("F: %f Delay:%f", frameDuration->ReadMs(), delay);
 
 	PerfTimer* delayt = new PerfTimer();
 	delayt->Start();
