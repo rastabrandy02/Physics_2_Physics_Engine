@@ -18,9 +18,14 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	PhysBody* GetPhysbody() const
+	{
+		return body;
+	}
+
 public:
 
-	PhysBody* playerBody;
+	PhysBody* body;
 	int speed = 8;
 	int jumForce = 40000;
 };

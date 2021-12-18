@@ -32,28 +32,55 @@ update_status ModulePhysics::PreUpdate(float dt)
 		//---Gravity---
 		if (item->data->type != BODY_GROUND)
 		{
-			if ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
-			{
-				item->data->acceleration.y = gravity * item->data->mass;
-				
-				
-			}
-			else
-			{
-				if (item->data->velocity.y > 0.0f)
-				{
-					item->data->acceleration.y = 0.0f;
-					item->data->velocity.y = 0.0f;
-				}
-				
-				item->data->position.y = App->scene_intro->ground->rec.y - item->data->rec.h / 2;
-				
-
-			}
 			item->data->ComputeFriction();
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			item->data->ComputeKinematics(dt);
+
+			bool hasTouchedFloor = (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2 <= 2);
+			LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
+				LOG("dist %i", item->data->rec.h);
+
+			if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+			{
+				
+				if (hasTouchedFloor)
+				{
+					
+					while ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+					{
+						item->data->position.y--;
+					}
+					while ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
+					{
+						item->data->position.y++;
+					}
+				
+				}
+
+				//if (item->data->velocity.y > 0.0f)
+				//{
+				
+					item->data->acceleration.y -= item->data->acceleration.y;
+				
+					item->data->velocity.y = 0.0f;
+				//}
+				
+				LOG("true");
+			}
+			else
+			{
+				item->data->acceleration.y = gravity * item->data->mass;
+				
+				//item->data->position.y = App->scene_intro->ground->rec.y - item->data->rec.h / 2;
+				LOG("true");
+
+			}
+
+			
 		}
+
+
+
 
 		//---Collisions---
 		

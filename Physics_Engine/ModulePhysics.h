@@ -19,6 +19,8 @@ public:
 	p2List<PhysBody*> bodies;
 	//PhysBody ground;
 
+	
+
 private:
 	
 	bool debug;

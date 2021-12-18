@@ -18,14 +18,25 @@ public:
 	PhysBody(BodyType type);
 	
 	~PhysBody();
-	
+
+	update_status PreUpdate(float dt);
+	update_status PostUpdate(float dt);
 
 	void ComputeKinematics(float dt);
 	void ComputeFriction();
 
 	void AdjustSprite();
 	void LimitSpeed(float limitX, float limitY);
-	
+	void ApplyImpulse(p2Point<float> force)
+	{
+		if (this)
+		{
+			acceleration.x = force.x;
+			acceleration.y = force.y;
+		}
+		
+	}
+
 	int mass;
 	float restitutionCoeff;
 	float frictionCoeff;

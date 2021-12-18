@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
+#include "p2Point.h"
+
 
 
 
@@ -22,7 +24,7 @@ bool ModuleSceneIntro::Start()
 	
 	 ground = new PhysBody(BODY_GROUND);
 	 
-	 ground->rec = { 0, SCREEN_HEIGHT - 100, SCREEN_WIDTH, 150 };
+	 ground->rec = { 0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, 150 };
 	 App->physics->bodies.add(ground);
 
 	 test01 = new PhysBody(BODY_RECTANGLE);
@@ -31,7 +33,7 @@ bool ModuleSceneIntro::Start()
 	 test01->rec = { (int)test01->position.x,(int) test01->position.y, 20,20 };
 	 test01->mass = 30;
 	 test01->restitutionCoeff = 0.7f;
-	 test01->frictionCoeff = .09f;
+	 test01->frictionCoeff = .5f;
 	 App->physics->bodies.add(test01);
 
 	 test02 = new PhysBody(BODY_RECTANGLE);
@@ -40,12 +42,15 @@ bool ModuleSceneIntro::Start()
 	 test02->rec = { (int)test02->position.x,(int)test02->position.y, 80,80 };
 	 test02->mass = 150;
 	 test02->restitutionCoeff = 0.5f;
-	 test02->frictionCoeff = .09f;
+	 test02->frictionCoeff = .9f;
 	 App->physics->bodies.add(test02);
 	/* plantPos.x = 200;
 	 plantPos.y = SCREEN_HEIGHT - 175;
 	 plant = { plantPos.x, plantPos.y, 10, 75 };*/
 	
+
+	 
+	 
 
 	return ret;
 }
@@ -68,6 +73,14 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 update_status ModuleSceneIntro::Update(float dt)
 {
 	
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
+	{
+		p2Point<float> force;
+		force.x = 0;
+		force.y = -20000;
+		App->player->GetPhysbody()->acceleration = force;
+	}
+
 	
 	return UPDATE_CONTINUE;
 }

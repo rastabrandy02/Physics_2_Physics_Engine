@@ -1,6 +1,7 @@
 #include <math.h>
 #include "PhysBody.h"
 
+
 PhysBody::PhysBody()
 {
 	position.SetToZero();
@@ -50,11 +51,11 @@ void PhysBody::ComputeFriction()
 	{
 		if (velocity.x > 0.0f)
 		{
-			acceleration.x = -mass * frictionCoeff;
+			acceleration.x = -mass * frictionCoeff * 2;
 		}
 		if (velocity.x < 0.0f)
 		{
-			acceleration.x = mass * frictionCoeff;
+			acceleration.x = mass * frictionCoeff * 2;
 		}
 	}
 	float minV = 0.9f;
@@ -63,8 +64,8 @@ void PhysBody::ComputeFriction()
 		velocity.x = 0.0f;
 		acceleration.x = 0.0f;
 	}
-	LOG("velocity x: %f", velocity.x);
-	LOG("acceleration x; %f", acceleration.x);
+	
+
 }
 void PhysBody::LimitSpeed(float limitX, float limitY)
 {
@@ -72,4 +73,18 @@ void PhysBody::LimitSpeed(float limitX, float limitY)
 	if (velocity.x < -limitX) velocity.x = -limitX;
 	if (velocity.y > limitY) velocity.y = limitY;
 	if (velocity.y < -limitY)velocity.y = -limitY;
+}
+
+update_status PhysBody::PreUpdate(float dt)
+{
+	ComputeKinematics(dt);
+
+	return UPDATE_CONTINUE;
+}
+
+update_status PhysBody::PostUpdate(float dt)
+{
+
+
+	return UPDATE_CONTINUE;
 }

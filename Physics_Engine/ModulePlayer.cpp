@@ -14,14 +14,14 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
-	playerBody = new PhysBody(BODY_RECTANGLE);
-	App->physics->bodies.add(playerBody);
-	playerBody->position.x = 30;
-	playerBody->position.y = SCREEN_HEIGHT - 160;
-	playerBody->rec = {((int) playerBody->position.x - 25),((int) playerBody->position.y -25), 50, 50 };
-	playerBody->mass = 100;
-	playerBody->restitutionCoeff = 0.5f;
-	playerBody->frictionCoeff = 0.09f;
+	body = new PhysBody(BODY_RECTANGLE);
+	App->physics->bodies.add(body);
+	body->position.x = 30;
+	body->position.y = SCREEN_HEIGHT - 400;
+	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
+	body->mass = 100;
+	body->restitutionCoeff = 0.1f;
+	body->frictionCoeff = 1.f;
 	return true;
 }
 
@@ -38,15 +38,16 @@ update_status ModulePlayer::PreUpdate(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		playerBody->velocity.x += speed;
+		body->velocity.x += speed;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		playerBody->velocity.x -= speed;
+		body->velocity.x -= speed;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		playerBody->acceleration.y -= jumForce;
+		body->velocity.y = 0;
+		body->acceleration.y -= jumForce;
 		
 	}
 		
@@ -56,14 +57,24 @@ update_status ModulePlayer::PreUpdate(float dt)
 update_status ModulePlayer::Update(float dt)
 {
 	
-	
-	
+	//LOG("v y: %f", body->velocity.y);
+	//LOG("a y; %f", body->acceleration.y);
+
+	int t = 50;
+
+	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 255);
+	SDL_RenderDrawLine(App->renderer->renderer,
+		body->position.x + t,
+		body->position.y,
+		body->position.x + body->velocity.x + t,
+		body->position.y + body->velocity.y);
+
 	return UPDATE_CONTINUE;
 }
 update_status ModulePlayer::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 255);
-	SDL_RenderFillRect(App->renderer->renderer, &playerBody->rec);
+	SDL_RenderFillRect(App->renderer->renderer, &body->rec);
 	
 	return UPDATE_CONTINUE;
 }

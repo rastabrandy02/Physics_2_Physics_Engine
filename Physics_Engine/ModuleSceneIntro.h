@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "p2Point.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 
 
 class PhysBody;
