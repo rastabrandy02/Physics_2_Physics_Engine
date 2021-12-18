@@ -23,7 +23,7 @@ public:
 	bool CleanUp();
 
 public:
-
+	SDL_Texture* background;
 	PhysBody* ground;
 	PhysBody* test01;
 	PhysBody* test02;
