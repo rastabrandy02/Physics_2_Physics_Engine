@@ -12,6 +12,9 @@
     <Filter Include="Header Files\Containers">
       <UniqueIdentifier>{97c4111e-b102-4ba8-9053-6f07ccbbe3d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Projectile types">
+      <UniqueIdentifier>{053831fc-c2f9-420d-add0-cdcc25c5be6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -68,6 +71,15 @@
     <ClInclude Include="Defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Proj_Bomb.h">
+      <Filter>Header Files\Projectile types</Filter>
+    </ClInclude>
+    <ClInclude Include="Proj_Egg.h">
+      <Filter>Header Files\Projectile types</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -110,6 +122,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Proj_Bomb.cpp">
+      <Filter>Header Files\Projectile types</Filter>
+    </ClCompile>
+    <ClCompile Include="Proj_Egg.cpp">
+      <Filter>Header Files\Projectile types</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

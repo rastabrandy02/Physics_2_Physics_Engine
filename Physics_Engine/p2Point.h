@@ -17,6 +17,12 @@ public:
 	p2Point()
 	{}
 
+	p2Point(TYPE x, TYPE y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
 	p2Point(const p2Point& p)
 	{
 		x = p.x;

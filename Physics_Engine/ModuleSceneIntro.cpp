@@ -6,7 +6,7 @@
 
 
 
-ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleSceneIntro::ModuleSceneIntro(Application* App, bool start_enabled) : Module(App, start_enabled)
 {
 	
 }
@@ -28,14 +28,14 @@ bool ModuleSceneIntro::Start()
 	 App->physics->bodies.add(ground);
 
 	 test01 = new PhysBody(BODY_RECTANGLE);
-	 test01->position.x = 10;
-	 test01->position.y = 50;
-	 test01->velocity.x = 200;
-
+	 test01->position.x = 30;
+	 test01->position.y = 100;
+	 test01->velocity.x = 100;
+	 test01->velocity.y = -100;
 	 test01->rec = { (int)test01->position.x,(int) test01->position.y, 20,20 };
 	 test01->mass = 30;
 	 test01->restitutionCoeff = 0.7f;
-	 test01->liftCoeff = 2.f;
+	 test01->liftCoeff = 0.5f;
 	 App->physics->bodies.add(test01);
 
 	 test02 = new PhysBody(BODY_RECTANGLE);
@@ -49,8 +49,8 @@ bool ModuleSceneIntro::Start()
 	 plantPos.y = SCREEN_HEIGHT - 175;
 	 plant = { plantPos.x, plantPos.y, 10, 75 };*/
 	
-
-	 
+	 App->renderer->camera.x = 100;
+	 App->renderer->camera.y = -500;
 	 
 
 	return ret;
@@ -82,6 +82,95 @@ update_status ModuleSceneIntro::Update(float dt)
 		App->player->GetPhysbody()->acceleration = force;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		freeCam = !freeCam;
+	}
+
+	
+	if (!freeCam)
+	{
+		int w, h;
+
+		w = SCREEN_WIDTH;
+		h = SCREEN_HEIGHT;
+
+		
+		float playerX = App->player->body->position.x;
+		float playerY = App->player->body->position.y;
+
+		int marginX = 500;
+		int marginY = 400;
+		
+		//App->renderer->camera.x = -(playerX );
+
+		if (playerX > marginX)
+		{
+			App->renderer->camera.x = -(playerX - marginX);
+		}
+
+
+		if (playerX >= 48 * 100 - w + marginX)
+		{
+
+			App->renderer->camera.x = -(48 * 100 - (w));
+		}
+
+		if (playerY > marginY)
+		{
+			App->renderer->camera.y = -(playerY - marginY);
+		}
+
+
+		if (playerY >= 30 * 48 - h + marginY)
+		{
+
+			App->renderer->camera.y = -(30 * 48 - (h));
+		}
+
+
+		//if (playerX > marginX && playerX < 100 * 48)
+		//{
+		//	App->renderer->camera.x = -playerX * 48 * 1.042f + marginX * 48;
+		//}
+
+
+
+	}
+	else
+	{
+
+		int cameraSpeed = 5;
+		if ((App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT))
+			if (App->renderer->camera.y < (-5))
+			{
+				App->renderer->camera.y += cameraSpeed;
+			}
+
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+			if (App->renderer->camera.y > (-48 * 15 + 16))
+			{
+				App->renderer->camera.y -= cameraSpeed;
+			}
+
+
+
+		if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT))
+			if (App->renderer->camera.x < (0))
+			{
+				App->renderer->camera.x += cameraSpeed;
+			}
+
+
+
+		if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT))
+			if (App->renderer->camera.x > (-48 * 78 + 24))
+			{
+				App->renderer->camera.x -= cameraSpeed;
+			}
+
+	}
 	
 	return UPDATE_CONTINUE;
 }

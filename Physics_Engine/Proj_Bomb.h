@@ -1,17 +1,16 @@
 #pragma once
+#include "ModuleRender.h"
 #include "Module.h"
 #include "Animation.h"
 #include "Globals.h"
 #include "p2Point.h"
 #include "ModulePhysics.h"
-#include "ProjectileHandler.h"
 
-
-class ModulePlayer : public Module
+class Proj_Bomb : public Module
 {
 public:
-	ModulePlayer(Application* app, bool start_enabled = true);
-	virtual ~ModulePlayer();
+	Proj_Bomb(p2Point<float> startPosition, int damage, PhysBody* b);
+	virtual ~Proj_Bomb();
 
 	bool Start();
 	update_status PreUpdate(float dt);
@@ -24,16 +23,9 @@ public:
 		return body;
 	}
 
-
-
 public:
 
-	SDL_Texture* tex_player;
 	PhysBody* body;
-	int speed = 8;
-	int jumpForce = 40000;
-
-	float maxVelocity = 200;
 
 
 

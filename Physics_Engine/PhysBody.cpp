@@ -31,13 +31,17 @@ void PhysBody::ComputeKinematics(float dt)
 	position.x = position.x + velocity.x * dt;
 	position.y = position.y + velocity.y * dt;*/
 
-	if (acceleration.y > 0)
+	if (velocity.y > 0)
 	{
 		float counterforce =  -liftCoeff * fabs(velocity.x);
 
 		//LOG("lift force %f", counterforce);
 		//LOG("acc %f", acceleration.y);
 		acceleration.y += counterforce;
+
+		float mult = 0.1;
+		if (velocity.x > 0) velocity.x -= mult * counterforce;
+		if (velocity.x < 0) velocity.x += mult * counterforce;
 	}
 
 
@@ -46,6 +50,10 @@ void PhysBody::ComputeKinematics(float dt)
 
 	velocity.x = velocity.x + acceleration.x * dt;
 	velocity.y = velocity.y + acceleration.y * dt;
+
+
+	
+
 
 
 	//lift
@@ -67,14 +75,14 @@ void PhysBody::ComputeFriction(float frictionCoeff)
 	
 	if (velocity.x > 0.0f)
 	{
-		acceleration.x = -mass * frictionCoeff * 2;
+		acceleration.x = -mass * frictionCoeff * 3;
 	}
 	if (velocity.x < 0.0f)
 	{
-		acceleration.x = mass * frictionCoeff * 2;
+		acceleration.x = mass * frictionCoeff * 3;
 	}
 	
-	float minV = 0.9f;
+	float minV = 2.f;
 	if (velocity.x <= minV && velocity.x >= -minV)
 	{
 		velocity.x = 0.0f;

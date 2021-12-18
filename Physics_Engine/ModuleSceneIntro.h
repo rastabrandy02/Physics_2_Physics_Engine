@@ -24,6 +24,8 @@ public:
 
 public:
 
+	bool freeCam = false;
+
 	PhysBody* ground;
 	PhysBody* test01;
 	PhysBody* test02;

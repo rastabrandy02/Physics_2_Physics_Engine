@@ -12,6 +12,9 @@
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
+#include "ProjectileHandler.h"
+#include "Proj_Bomb.h"
+#include "Proj_Egg.h"
 #include "Timer.h"
 #include "PerfTimer.h"
 
@@ -26,6 +29,10 @@ public:
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
 	ModulePhysics* physics;
+	ProjectileHandler* projectile_handler;
+	Proj_Bomb* bomb;
+	Proj_Egg* egg;
+	
 
 private:
 
