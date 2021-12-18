@@ -39,7 +39,7 @@ public:
 
 	int mass;
 	float restitutionCoeff;
-	
+	float liftCoeff;
 
 	BodyType type;
 	SDL_Rect rec;

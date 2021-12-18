@@ -20,7 +20,8 @@ bool ModulePlayer::Start()
 	body->position.y = SCREEN_HEIGHT - 500;
 	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
 	body->mass = 100;
-	body->restitutionCoeff = 0.1f;
+	body->restitutionCoeff = 3.f;
+	body->liftCoeff = 0.5;
 	return true;
 }
 

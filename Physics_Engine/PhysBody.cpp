@@ -31,11 +31,28 @@ void PhysBody::ComputeKinematics(float dt)
 	position.x = position.x + velocity.x * dt;
 	position.y = position.y + velocity.y * dt;*/
 
+	if (acceleration.y > 0)
+	{
+		float counterforce =  -liftCoeff * fabs(velocity.x);
+
+		//LOG("lift force %f", counterforce);
+		//LOG("acc %f", acceleration.y);
+		acceleration.y += counterforce;
+	}
+
+
 	position.x = position.x + velocity.x * dt + (acceleration.x / 2) * pow(dt, 2);
 	position.y = position.y + velocity.y * dt + (acceleration.y /2 ) * pow(dt, 2);
 
 	velocity.x = velocity.x + acceleration.x * dt;
 	velocity.y = velocity.y + acceleration.y * dt;
+
+
+	//lift
+
+	
+
+
 
 	AdjustSprite();
 }
@@ -46,7 +63,7 @@ void PhysBody::AdjustSprite()
 }
 void PhysBody::ComputeFriction(float frictionCoeff)
 {
-	LOG("friction active");
+	///LOG("friction active");
 	
 	if (velocity.x > 0.0f)
 	{

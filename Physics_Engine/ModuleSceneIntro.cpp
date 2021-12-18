@@ -28,11 +28,14 @@ bool ModuleSceneIntro::Start()
 	 App->physics->bodies.add(ground);
 
 	 test01 = new PhysBody(BODY_RECTANGLE);
-	 test01->position.x = 500;
+	 test01->position.x = 10;
 	 test01->position.y = 50;
+	 test01->velocity.x = 200;
+
 	 test01->rec = { (int)test01->position.x,(int) test01->position.y, 20,20 };
 	 test01->mass = 30;
 	 test01->restitutionCoeff = 0.7f;
+	 test01->liftCoeff = 2.f;
 	 App->physics->bodies.add(test01);
 
 	 test02 = new PhysBody(BODY_RECTANGLE);

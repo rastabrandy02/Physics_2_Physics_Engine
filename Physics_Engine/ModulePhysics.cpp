@@ -32,8 +32,8 @@ update_status ModulePhysics::PreUpdate(float dt)
 		//---Gravity---
 		if (item->data->type != BODY_GROUND)
 		{
-			LOG("v %f", App->player->body->position.x);
-			LOG("acc %f", App->player->body->acceleration.x);
+			//LOG("v %f", App->player->body->position.x);
+			//LOG("acc %f", App->player->body->acceleration.x);
 			
 			item->data->ComputeKinematics(dt);
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
@@ -49,6 +49,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 				item->data->ComputeFriction(groundFriction);
 			else
 				item->data->ComputeFriction(airFriction);
+
 			//LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
 			//LOG("dist %i", item->data->rec.h);
 
