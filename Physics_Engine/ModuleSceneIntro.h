@@ -29,10 +29,10 @@ public:
 
 
 	SDL_Texture* background;
+	SDL_Texture* bumper;
 
-	PhysBody* ground;
-	PhysBody* wall_1;
-	PhysBody* wall_2;
+
+	p2List<PhysBody*> ground;
 
 	PhysBody* prop;
 	//SDL_Rect ground;

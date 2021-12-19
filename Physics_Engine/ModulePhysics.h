@@ -22,11 +22,11 @@ public:
 	p2List<PhysBody*> bodies;
 	//PhysBody ground;
 
-	
+	bool debug = false;
 
 private:
 	
-	bool debug;
+	
 	float gravity = 20.0f;
 	
 	p2Point<float>speedLimit;
@@ -36,6 +36,7 @@ private:
 	float groundFriction = 1.f;
 	float airFriction = 0.7f;
 
-	float maxCollisionAttempts = 100;
+	int maxCollisionAttempts = 100;
+	int maxKineticUpdates = 1;
 	
 };

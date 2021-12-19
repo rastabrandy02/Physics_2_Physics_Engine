@@ -9,7 +9,7 @@ Ent_Enemy_1::Ent_Enemy_1(p2Point<float> startPosition, int damage, PhysBody* b) 
 
 	this->body = b;
 	body->position = startPosition;
-
+	this->damage = damage;
 }
 
 Ent_Enemy_1::~Ent_Enemy_1()
@@ -44,7 +44,7 @@ update_status Ent_Enemy_1::Update(float dt)
 }
 update_status Ent_Enemy_1::PostUpdate(float dt)
 {
-	App->renderer->Blit(App->projectile_handler->tex_egg, body->rec.x, body->rec.y, NULL);
+	App->renderer->Blit(App->entity_handler->tex_pengu, body->rec.x, body->rec.y, NULL);
 	return UPDATE_CONTINUE;
 }
 

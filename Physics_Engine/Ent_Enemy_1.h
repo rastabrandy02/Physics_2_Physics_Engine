@@ -25,9 +25,16 @@ public:
 
 	void OnCollision(PhysBody* body1, PhysBody* body2) override;
 
+	void DoDamage(int damage)
+	{
+		if (health > 0) health -= damage;
+		if (health < 0) health = 0;
+	}
+
 public:
 
 	PhysBody* body;
-
+	int health;
+	int damage;
 
 };

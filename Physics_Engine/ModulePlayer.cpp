@@ -17,13 +17,19 @@ bool ModulePlayer::Start()
 	body = new PhysBody(BODY_RECTANGLE);
 	App->physics->bodies.add(body);
 	body->position.x = 48 * 3;
-	body->position.y = 48 * -5;
-	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
+	body->position.y = 48 * 5;
+	startPos = body->position;
+
+
+	body->rec = { ((int)body->position.x - 15),((int)body->position.y - 15),30, 40 };
 	body->mass = 100;
 	body->restitutionCoeff = 1.f;
 	body->liftCoeff = 0.2f;
+	body->frictionCoeff = 0.9f;
 
 	tex_player = App->textures->Load("Assets/images/worm.png");
+	Arrow = App->textures->Load("Assets/images/arrow.png");
+	angle = 0;
 
 	return true;
 }
@@ -53,6 +59,31 @@ update_status ModulePlayer::PreUpdate(float dt)
 		body->acceleration.y -= jumpForce;
 		
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	{
+		body->position = startPos;
+		body->velocity.SetToZero();
+		body->acceleration.SetToZero();
+	}
+	//560, 750
+	if (body->position.x > 560 && body->position.x < 560 + 74 && body->position.y + body->rec.h / 2 > 750)
+	{
+		p2Point<float> i(0, -40000);
+		body->ApplyImpulse(i);
+	}
+
+	float angleSpeed = 3;
+
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+	{
+		angle += angleSpeed;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT)
+	{
+		angle -= angleSpeed;
+	}
+
 	//LOG("v %f", body->velocity.y);
 	//LOG("a %f", body->acceleration.y);
 	//LOG("pos %f, %f", body->position.x, body->position.y);
@@ -75,28 +106,107 @@ update_status ModulePlayer::Update(float dt)
 		body->position.y + body->velocity.y + App->renderer->camera.y);
 
 
-	
-
-	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		p2Point<float> projAcc(0, 0);
-		p2Point<float> projVel(200, -500);
-		App->projectile_handler->CreateProjectile(BOMB, body->position.x + 20, body->position.y - 20, projAcc, projVel);
+		weaponNumber--;
+	}if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		weaponNumber++;
 	}
+
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		p2Point<float> projAcc(0, 0);
-		p2Point<float> projVel(300, -200);
-		App->projectile_handler->CreateProjectile(EGG, body->position.x + 20, body->position.y - 20, projAcc, projVel);
-	}
 
+		int force = 800;
+
+		switch (weaponNumber)
+		{
+		case -1:
+		{
+			weaponNumber = 1;
+
+
+		}
+		break;
+		case 0:
+		{
+			p2Point<float> projAcc(0, 0);
+			p2Point<float> projVel(force * cos(angle * PI / 180), force * sin(angle * PI / 180));
+			App->entity_handler->CreateEntity(BOMB, body->position.x + 20, body->position.y - 20, projAcc, projVel);
+
+
+		}
+		break;
+		case 1:
+		{
+			p2Point<float> projAcc(0, 0);
+			p2Point<float> projVel(force * cos(angle * PI / 180), force * sin(angle * PI / 180));
+			App->entity_handler->CreateEntity(EGG, body->position.x + 20, body->position.y - 20, projAcc, projVel);
+
+
+		}
+		break;
+		case 2:
+		{
+			weaponNumber = 0;
+
+
+		}
+		break;
+
+		default:
+			break;
+		}
+
+	}
+	LOG("%i", weaponNumber);
 
 	return UPDATE_CONTINUE;
 }
 update_status ModulePlayer::PostUpdate(float dt)
 {
 
-	App->renderer->Blit(tex_player, body->position.x - 15, body->position.y - 10, NULL);
+	App->renderer->Blit(tex_player, body->position.x - 15, body->position.y - 12, NULL);
+
+	App->renderer->Blit(
+		Arrow,
+		body->position.x + 50,
+		body->position.y,
+		NULL, 1, angle,
+		- 50,
+		6
+	);
+	switch (weaponNumber)
+	{
+	case -1:
+	{
+		weaponNumber = 1;
+
+
+	}
+	case 0:
+	{
+	
+		App->renderer->Blit(App->entity_handler->tex_bomb, 100, 100, NULL, 0);
+	}
+	break;
+	case 1:
+	{
+		App->renderer->Blit(App->entity_handler->tex_egg, 100, 100, &App->entity_handler->rec_egg, 0);
+
+	}
+	break;
+	case 2:
+	{
+		weaponNumber = 0;
+
+
+	}
+	break;
+
+	default:
+		break;
+	}
 	
 	return UPDATE_CONTINUE;
 }

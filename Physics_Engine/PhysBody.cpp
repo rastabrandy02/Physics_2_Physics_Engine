@@ -56,6 +56,7 @@ void PhysBody::ComputeKinematics(float dt)
 		velocity.x = velocity.x + acceleration.x * dt;
 		velocity.y = velocity.y + acceleration.y * dt;
 
+
 	}
 	else
 	{

@@ -7,6 +7,8 @@
 #include "EntityHandler.h"
 
 
+#define PI 3.14159265359
+
 class ModulePlayer : public Module
 {
 public:
@@ -24,16 +26,23 @@ public:
 		return body;
 	}
 
-
+	
 
 public:
 
 	SDL_Texture* tex_player;
-	PhysBody* body;
+	PhysBody* body = nullptr;
 	int speed = 8;
 	int jumpForce = 40000;
 
 	float maxVelocity = 200;
+
+	p2Point<float> startPos; 
+
+	SDL_Texture* Arrow;
+	float angle;
+
+	int weaponNumber = 0;
 
 
 

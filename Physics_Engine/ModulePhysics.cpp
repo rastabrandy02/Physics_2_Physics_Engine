@@ -7,7 +7,7 @@
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -33,8 +33,14 @@ update_status ModulePhysics::PreUpdate(float dt)
 		bool hasTouchedFloor = false;
 		bool onGround = false;
 
-		if (!item->data->isStatic)
+		int kineticUpdates = 0;
+
+		if (!item->data->isStatic && kineticUpdates <= maxKineticUpdates)
+		{
 			item->data->ComputeKinematics(dt);
+			kineticUpdates++;
+		}
+			
 			
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			
@@ -122,12 +128,14 @@ update_status ModulePhysics::PreUpdate(float dt)
 							int marginW = 5;
 							int marginH = -10;
 							
-							
+							bool CalledCollision = false;
+
+
 							while (distY < item->data->rec.h / 2 + pb->data->rec.h / 2 &&
 								distX < item->data->rec.w /2 + pb->data->rec.w / 2 && 
 								!item->data->isStatic && collisionsAttempts < maxCollisionAttempts)
 							{
-								LOG("%i", (item->data->position.y < pb->data->position.y));
+								//LOG("%i", (item->data->position.y < pb->data->position.y));
 
  								while ((item->data->position.y < pb->data->position.y) &&
 									distX < item->data->rec.w /2 + pb->data->rec.w / 2 - marginW)
@@ -137,7 +145,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									double pb_temp;
 									float pb_remnant = modf(item->data->position.y, &pb_temp);
- 									if (!item->data->isStatic)
+ 									
 										item->data->position.y -= (item_remnant + 1);
 									if (!pb->data->isStatic)
 										pb->data->position.y += (pb_remnant + 1);
@@ -145,6 +153,14 @@ update_status ModulePhysics::PreUpdate(float dt)
 									distY = (fabs(pb->data->position.y - item->data->position.y));
 									float temp = item->data->rec.h / 2 + pb->data->rec.h / 2;
 									onTop = true;
+
+									if (!CalledCollision)
+									{
+										App->entity_handler->CollisionFromBody(item->data, pb->data);
+										App->entity_handler->CollisionFromBody(pb->data, item->data);
+										CalledCollision = true;
+									}
+
 
 									if (!(distY < temp))
 										break;
@@ -158,7 +174,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									double pb_temp;
 									float pb_remnant = modf(item->data->position.y, &pb_temp);
-									if (!item->data->isStatic)
+									
 										item->data->position.y += (item_remnant + 1);
 									if (!pb->data->isStatic)
 										pb->data->position.y -= (pb_remnant + 1);
@@ -167,11 +183,19 @@ update_status ModulePhysics::PreUpdate(float dt)
 									float temp = item->data->rec.h / 2 + pb->data->rec.h / 2;
 									onTop = true;
 
+									if (!CalledCollision)
+									{
+										App->entity_handler->CollisionFromBody(item->data, pb->data);
+										App->entity_handler->CollisionFromBody(pb->data, item->data);
+										CalledCollision = true;
+									}
+
+
 									if (!(distY < temp))
 										break;
 								}
 								
-								LOG("on top: %i", onTop);
+								//LOG("on top: %i", onTop);
 								while (item->data->position.x < pb->data->position.x && !onTop)
 								{
 									double item_temp;
@@ -179,12 +203,20 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									double pb_temp;
 									float pb_remnant = modf(item->data->position.x, &pb_temp);
-									if (!item->data->isStatic)
+									
 										item->data->position.x -= (item_remnant + 1);
 									if (!pb->data->isStatic)
 										pb->data->position.x += (pb_remnant + 1);
 									distX = fabs(item->data->position.x - pb->data->position.x);
 									float temp = item->data->rec.w / 2 + pb->data->rec.w / 2;
+
+									if (!CalledCollision)
+									{
+										App->entity_handler->CollisionFromBody(item->data, pb->data);
+										App->entity_handler->CollisionFromBody(pb->data, item->data);
+										CalledCollision = true;
+									}
+
 									if (!(distX < temp))
 										break;
 								}
@@ -197,12 +229,20 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									double pb_temp;
 									float pb_remnant = modf(item->data->position.x, &pb_temp);
-									if (!item->data->isStatic)
+									
 										item->data->position.x += (item_remnant + 1);
 									if (!pb->data->isStatic)
 										pb->data->position.x -= (pb_remnant + 1);
 									distX = fabs(item->data->position.x - pb->data->position.x);
 									float temp = item->data->rec.w / 2 + pb->data->rec.w / 2;
+
+									if (!CalledCollision)
+									{
+										App->entity_handler->CollisionFromBody(item->data, pb->data);
+										App->entity_handler->CollisionFromBody(pb->data, item->data);
+										CalledCollision = true;
+									}
+
 									if (!(distX < temp))
 										break;
 								}
@@ -217,10 +257,16 @@ update_status ModulePhysics::PreUpdate(float dt)
 								}
 								
 								collisionsAttempts++;
+
+								
+								
 							}
 
+
+							
+
 							if (onTop)
-								item->data->ComputeFriction(groundFriction);
+								item->data->ComputeFriction(item->data->frictionCoeff);
 							else
 								item->data->ComputeFriction(airFriction);
 
@@ -399,6 +445,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 					}
 
 					onTop = false;
+
+					
+
 				}
 				break;
 			}
@@ -415,24 +464,28 @@ update_status ModulePhysics::PreUpdate(float dt)
 update_status ModulePhysics::PostUpdate(float dt)
 {
 	
+	for (p2List_item<PhysBody*>* item = bodies.getFirst(); item; item = item->next)
+	{
+		//if (item->data == nullptr)
+		//{
+		//	bodies.del(item);
+		//}
+		//continue;
+
+		if (item->data != nullptr && item->data->pendingToDelete)
+		{
+			delete item->data;
+			bodies.del(item);
+			item = bodies.getFirst();
+		}
+	}
+
 
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
 	if(!debug)
-		for (p2List_item<PhysBody*>* item = bodies.getFirst(); item; item = item->next)
-		{
-			SDL_SetRenderDrawColor(App->renderer->renderer, 0, 0, 255, 100);
-
-			SDL_Rect tempRect = item->data->rec;
-
-			tempRect.x += App->renderer->camera.x;
-			tempRect.y += App->renderer->camera.y;
-
-			SDL_RenderFillRect(App->renderer->renderer, &tempRect);
-			SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 100);
-			SDL_RenderDrawPoint(App->renderer->renderer,item->data->position.x + App->renderer->camera.x, item->data->position.y + App->renderer->camera.y);
-		}
+		
 		
 		return UPDATE_CONTINUE;
 

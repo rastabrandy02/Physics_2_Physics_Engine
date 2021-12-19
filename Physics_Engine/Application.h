@@ -30,7 +30,7 @@ public:
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
 	ModulePhysics* physics;
-	EntityHandler* projectile_handler;
+	EntityHandler* entity_handler;
 	Ent_Bomb* bomb;
 	Ent_Egg* egg;
 	Ent_Enemy_1* ent_enemy_1;

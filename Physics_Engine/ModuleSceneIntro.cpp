@@ -21,19 +21,54 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	terrain = App->textures->Load("Assets/images/terrain.png");
+	terrain = App->textures->Load("Assets/images/level_1.png");
 	meta = App->textures->Load("Assets/images/meta.png");
 
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
-	ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48, 48 * 16, 48 * 10, 48 * 2, 0);
-	ground->isStatic = true;
-	wall_1 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 0, 0, 48, 48 * 16, 0);
-	wall_1->isStatic = true;
-	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 9, 48 * 11, 48 * 2, 48 * 8, 0);
-	wall_2->isStatic = true;
-	prop = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 3, 48 * 3, 48, 48, 50);
+	PhysBody* temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64, 64 * 12, 64 * 10, 48 * 23, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 0, 0, 64, 64 * 12, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 11, 64 * 7, 64 * 2, 64 * 8, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 20, 64 * 11, 64 * 7, 64, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 33, 64 * 13, 64 * 5, 64 * 2, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 38, 64 * 11, 64 * 4, 64 * 5, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 42, 64 * 7, 64 * 7, 64 * 8, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+	temp_ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 64 * 49, 64 * 0, 64 * 1, 64 * 15, 0);
+	temp_ground->isStatic = true;
+	ground.add(temp_ground);
+
+
+
+
+
+
+
+	//p2Point<float> zero(0, 0);
+	//App->entity_handler->CreateEntity(ENEMY_1, 48 * 5, 48 * 9, zero, zero);
+
 
 
 
@@ -65,7 +100,8 @@ bool ModuleSceneIntro::Start()
 	 plantPos.y = SCREEN_HEIGHT - 175;
 	 plant = { plantPos.x, plantPos.y, 10, 75 };*/
 
-	 background = App->textures->Load("Images/background.png");
+	background = App->textures->Load("Assets/images/background.png");
+	bumper = App->textures->Load("Assets/images/bumper.png");
 
 	 App->renderer->camera.x = 0;
 	 App->renderer->camera.y = 0;
@@ -188,9 +224,26 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	//SDL_RenderFillRect(App->renderer->renderer, &test02->rec);
 
 	SDL_Rect groundRect = { 2 * 48,0,12 * 48,2 * 48 };
+	App->renderer->Blit(background, 0, 0, NULL,0);
 
+	App->renderer->Blit(terrain, 0, 0, NULL);
+	App->renderer->Blit(bumper,560, 750, NULL);
 
-	//App->renderer->Blit(terrain, 0, 0, NULL);
+if (App->physics->debug)
+{
+	for (p2List_item<PhysBody*>* item = App->physics->bodies.getFirst(); item; item = item->next)
+	{
+		SDL_SetRenderDrawColor(App->renderer->renderer, 0, 0, 100, 100);
 
+		SDL_Rect tempRect = item->data->rec;
+
+		tempRect.x += App->renderer->camera.x;
+		tempRect.y += App->renderer->camera.y;
+
+		SDL_RenderFillRect(App->renderer->renderer, &tempRect);
+		SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 100);
+		SDL_RenderDrawPoint(App->renderer->renderer, item->data->position.x + App->renderer->camera.x, item->data->position.y + App->renderer->camera.y);
+	}
+}
 	return UPDATE_CONTINUE;
 }

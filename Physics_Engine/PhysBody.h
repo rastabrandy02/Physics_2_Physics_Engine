@@ -44,6 +44,7 @@ public:
 	int mass;
 	float restitutionCoeff;
 	float liftCoeff;
+	float frictionCoeff;
 
 	BodyType type;
 	EntityType e_type;
@@ -51,6 +52,8 @@ public:
 	p2Point<float> position;
 	p2Point<float> velocity;
 	p2Point<float> acceleration;
+
+	bool pendingToDelete = false;
 	bool isStatic = false;
 
 

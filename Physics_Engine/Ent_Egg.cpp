@@ -9,7 +9,7 @@ Ent_Egg::Ent_Egg(p2Point<float> startPosition, int damage, PhysBody* b) : Module
 
 	this->body = b;
 	body->position = startPosition;
-
+	this->damage = damage;
 }
 
 Ent_Egg::~Ent_Egg()
@@ -44,7 +44,7 @@ update_status Ent_Egg::Update(float dt)
 }
 update_status Ent_Egg::PostUpdate(float dt)
 {
-	App->renderer->Blit(App->projectile_handler->tex_egg, body->rec.x, body->rec.y, NULL);
+	App->renderer->Blit(App->entity_handler->tex_egg, body->rec.x, body->rec.y, &App->entity_handler->rec_egg);
 	return UPDATE_CONTINUE;
 }
 
@@ -53,5 +53,12 @@ update_status Ent_Egg::PostUpdate(float dt)
 
 void Ent_Egg::OnCollision(PhysBody* body1, PhysBody* body2)
 {
+	if ((body2->type == BodyType::BODY_RECTANGLE) && body2 != App->player->body && body2 != App->player->body && body2->type != EGG)
+	{
+
+		//App->entity_handler->DamageEntity(body2, damage);
+		App->entity_handler->DeleteEntity(body);
+
+	}
 
 }
