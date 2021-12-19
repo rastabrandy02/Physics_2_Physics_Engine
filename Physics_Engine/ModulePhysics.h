@@ -5,6 +5,7 @@
 #include "PhysBody.h"
 
 class PhysBody;
+enum BodyType;
 class ModulePhysics : public Module
 {
 public:
@@ -15,6 +16,8 @@ public:
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+
+	PhysBody* CreateBody(BodyType type, int x, int y, int w, int h, int mass);
 
 	p2List<PhysBody*> bodies;
 	//PhysBody ground;
@@ -31,6 +34,6 @@ private:
 	p2Point<float> totalMomentum;
 
 	float groundFriction = 1.f;
-	float airFriction = 0.4f;
+	float airFriction = 0.9f;
 	
 };

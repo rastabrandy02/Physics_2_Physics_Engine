@@ -25,14 +25,17 @@ public:
 public:
 
 	bool freeCam = false;
+	SDL_Texture* terrain;
+
 
 	SDL_Texture* background;
 
 	PhysBody* ground;
-	PhysBody* test01;
-	PhysBody* test02;
+	PhysBody* wall_1;
+	PhysBody* wall_2;
 	//SDL_Rect ground;
 	SDL_Rect plant;
+	SDL_Texture* meta;
 
 	p2Point <int> plantPos;
 };

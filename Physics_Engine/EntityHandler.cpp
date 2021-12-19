@@ -1,18 +1,18 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ProjectileHandler.h"
+#include "EntityHandler.h"
 #include "ModulePlayer.h"
 #include "PhysBody.h"
 
-ProjectileHandler::ProjectileHandler(Application* app, bool start_enabled) : Module(app, start_enabled)
+EntityHandler::EntityHandler(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
 
-ProjectileHandler::~ProjectileHandler()
+EntityHandler::~EntityHandler()
 {}
 
 // Load assets
-bool ProjectileHandler::Start()
+bool EntityHandler::Start()
 {
 	tex_bomb = App->textures->Load("Assets/bomb.png");
 	tex_egg = App->textures->Load("Assets/egg.png");
@@ -21,14 +21,14 @@ bool ProjectileHandler::Start()
 }
 
 // Unload assets
-bool ProjectileHandler::CleanUp()
+bool EntityHandler::CleanUp()
 {
 	LOG("Unloading player");
 
 	for (int i = 0; i < eggs.count(); i++)
 	{
 
-		Proj_Egg* iteratorEggs;
+		Ent_Egg* iteratorEggs;
 		eggs.at(i, iteratorEggs);
 
 		iteratorEggs->CleanUp();
@@ -37,7 +37,7 @@ bool ProjectileHandler::CleanUp()
 	for (int i = 0; i < bombs.count(); i++)
 	{
 
-		Proj_Bomb* iteratorBombs;
+		Ent_Bomb* iteratorBombs;
 		bombs.at(i, iteratorBombs);
 
 		iteratorBombs->CleanUp();
@@ -47,12 +47,12 @@ bool ProjectileHandler::CleanUp()
 }
 
 // Update: draw background
-update_status ProjectileHandler::PreUpdate(float dt)
+update_status EntityHandler::PreUpdate(float dt)
 {
 	for (int i = 0; i < eggs.count(); i++)
 	{
 
-		Proj_Egg* iteratorEggs;
+		Ent_Egg* iteratorEggs;
 		eggs.at(i, iteratorEggs);
 
 		iteratorEggs->PreUpdate(dt);
@@ -61,7 +61,7 @@ update_status ProjectileHandler::PreUpdate(float dt)
 	for (int i = 0; i < bombs.count(); i++)
 	{
 
-		Proj_Bomb* iteratorBombs;
+		Ent_Bomb* iteratorBombs;
 		bombs.at(i, iteratorBombs);
 
 		iteratorBombs->PreUpdate(dt);
@@ -69,14 +69,13 @@ update_status ProjectileHandler::PreUpdate(float dt)
 	
 	return UPDATE_CONTINUE;
 }
-update_status ProjectileHandler::Update(float dt)
+update_status EntityHandler::Update(float dt)
 {
-	LOG("handling projectiles");
 
 	for (int i = 0; i < eggs.count(); i++)
 	{
 
-		Proj_Egg* iteratorEggs;
+		Ent_Egg* iteratorEggs;
 		eggs.at(i, iteratorEggs);
 
 		iteratorEggs->Update(dt);
@@ -85,19 +84,19 @@ update_status ProjectileHandler::Update(float dt)
 	for (int i = 0; i < bombs.count(); i++)
 	{
 
-		Proj_Bomb* iteratorBombs;
+		Ent_Bomb* iteratorBombs;
 		bombs.at(i, iteratorBombs);
 
 		iteratorBombs->Update(dt);
 	}
 	return UPDATE_CONTINUE;
 }
-update_status ProjectileHandler::PostUpdate(float dt)
+update_status EntityHandler::PostUpdate(float dt)
 {
 	for (int i = 0; i < eggs.count(); i++)
 	{
 
-		Proj_Egg* iteratorEggs;
+		Ent_Egg* iteratorEggs;
 		eggs.at(i, iteratorEggs);
 
 		iteratorEggs->PostUpdate(dt);
@@ -106,7 +105,7 @@ update_status ProjectileHandler::PostUpdate(float dt)
 	for (int i = 0; i < bombs.count(); i++)
 	{
 
-		Proj_Bomb* iteratorBombs;
+		Ent_Bomb* iteratorBombs;
 		bombs.at(i, iteratorBombs);
 
 		iteratorBombs->PostUpdate(dt);
@@ -114,7 +113,7 @@ update_status ProjectileHandler::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ProjectileHandler::CreateProjectile(ProjectileType type, float x, float y, p2Point<float> startAcc, p2Point<float> startVel)
+void EntityHandler::CreateProjectile(ProjectileType type, float x, float y, p2Point<float> startAcc, p2Point<float> startVel)
 {
 
 	switch (type)
@@ -125,10 +124,12 @@ void ProjectileHandler::CreateProjectile(ProjectileType type, float x, float y, 
 		p2Point<float> pos;
 		pos.x = x;
 		pos.y = y;
-		Proj_Bomb* newBomb = new Proj_Bomb(pos, 10, body);
+		Ent_Bomb* newBomb = new Ent_Bomb(pos, 10, body);
 		newBomb->App = App;
 		body->acceleration = startAcc;
 		body->velocity = startVel;
+		body->rec.w = 14;
+		body->rec.h = 14;
 		bombs.add(newBomb);
 		App->physics->bodies.add(body);
 		newBomb->Start();
@@ -140,10 +141,13 @@ void ProjectileHandler::CreateProjectile(ProjectileType type, float x, float y, 
 		p2Point<float> pos;
 		pos.x = x;
 		pos.y = y;
-		Proj_Egg* newEgg = new Proj_Egg(pos, 10, body);
+		Ent_Egg* newEgg = new Ent_Egg(pos, 10, body);
 		newEgg->App = App;
 		body->acceleration = startAcc;
 		body->velocity = startVel;
+		body->rec.w = 15;
+		body->rec.h = 18;
+
 		eggs.add(newEgg);
 		App->physics->bodies.add(body);
 		newEgg->Start();

@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "p2Point.h"
 #include "ModulePhysics.h"
-#include "ProjectileHandler.h"
+#include "EntityHandler.h"
 
 
 class ModulePlayer : public Module

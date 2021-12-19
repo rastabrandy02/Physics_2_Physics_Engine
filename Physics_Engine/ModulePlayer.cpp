@@ -16,12 +16,12 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	body = new PhysBody(BODY_RECTANGLE);
 	App->physics->bodies.add(body);
-	body->position.x = 30;
-	body->position.y = SCREEN_HEIGHT - 500;
+	body->position.x = 48;
+	body->position.y = 48 * -5;
 	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
 	body->mass = 100;
-	body->restitutionCoeff = 0.5f;
-	body->liftCoeff = 0.5;
+	body->restitutionCoeff = 1.f;
+	body->liftCoeff = 0.2f;
 
 	tex_player = App->textures->Load("Assets/worm.png");
 
@@ -53,7 +53,9 @@ update_status ModulePlayer::PreUpdate(float dt)
 		body->acceleration.y -= jumpForce;
 		
 	}
-	LOG("v %f", body->velocity.x);
+	LOG("v %f", body->velocity.y);
+	LOG("a %f", body->acceleration.y);
+	LOG("pos %f, %f", body->position.x, body->position.y);
 	
 	return UPDATE_CONTINUE;
 }
@@ -96,7 +98,7 @@ update_status ModulePlayer::PostUpdate(float dt)
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 255);
 	SDL_RenderFillRect(App->renderer->renderer, &body->rec);
 
-	App->renderer->Blit(tex_player, body->position.x - 20, body->position.y - 50, NULL);
+	App->renderer->Blit(tex_player, body->position.x - 15, body->position.y - 10, NULL);
 	
 	return UPDATE_CONTINUE;
 }

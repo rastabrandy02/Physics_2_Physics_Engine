@@ -71,13 +71,13 @@
     <ClInclude Include="Defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Proj_Bomb.h">
+    <ClInclude Include="Ent_Bomb.h">
       <Filter>Header Files\Projectile types</Filter>
     </ClInclude>
-    <ClInclude Include="Proj_Egg.h">
+    <ClInclude Include="Ent_Egg.h">
       <Filter>Header Files\Projectile types</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileHandler.h">
+    <ClInclude Include="EntityHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -124,13 +124,13 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Proj_Bomb.cpp">
+    <ClCompile Include="Ent_Bomb.cpp">
       <Filter>Header Files\Projectile types</Filter>
     </ClCompile>
-    <ClCompile Include="Proj_Egg.cpp">
+    <ClCompile Include="Ent_Egg.cpp">
       <Filter>Header Files\Projectile types</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectileHandler.cpp">
+    <ClCompile Include="EntityHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

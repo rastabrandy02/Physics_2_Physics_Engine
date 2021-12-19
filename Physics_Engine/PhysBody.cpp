@@ -1,5 +1,7 @@
 #include <math.h>
 #include "PhysBody.h"
+#include "Application.h"
+#include "ModuleRender.h"
 
 
 PhysBody::PhysBody()
@@ -9,6 +11,7 @@ PhysBody::PhysBody()
 	acceleration.SetToZero();
 	rec = { 0 };
 	mass = 0;
+	
 }
 PhysBody::PhysBody(BodyType type)
 {
@@ -31,25 +34,36 @@ void PhysBody::ComputeKinematics(float dt)
 	position.x = position.x + velocity.x * dt;
 	position.y = position.y + velocity.y * dt;*/
 
-	if (velocity.y > 0)
+	if (isStatic == false)
 	{
-		float counterforce =  -liftCoeff * fabs(velocity.x);
+		if (velocity.y > 0)
+		{
+			float counterforce = -liftCoeff * fabs(velocity.x);
 
-		//LOG("lift force %f", counterforce);
-		//LOG("acc %f", acceleration.y);
-		acceleration.y += counterforce;
+			//LOG("lift force %f", counterforce);
+			//LOG("acc %f", acceleration.y);
+			acceleration.y += counterforce;
 
-		float mult = 0.1;
-		if (velocity.x > 0) velocity.x -= mult * counterforce;
-		if (velocity.x < 0) velocity.x += mult * counterforce;
+			float mult = 0.1;
+			if (velocity.x > 0) velocity.x -= mult * counterforce;
+			if (velocity.x < 0) velocity.x += mult * counterforce;
+		}
+
+
+		position.x = position.x + velocity.x * dt + (acceleration.x / 2) * pow(dt, 2);
+		position.y = position.y + velocity.y * dt + (acceleration.y / 2) * pow(dt, 2);
+
+		velocity.x = velocity.x + acceleration.x * dt;
+		velocity.y = velocity.y + acceleration.y * dt;
+
 	}
-
-
-	position.x = position.x + velocity.x * dt + (acceleration.x / 2) * pow(dt, 2);
-	position.y = position.y + velocity.y * dt + (acceleration.y /2 ) * pow(dt, 2);
-
-	velocity.x = velocity.x + acceleration.x * dt;
-	velocity.y = velocity.y + acceleration.y * dt;
+	else
+	{
+		velocity.SetToZero();
+		acceleration.SetToZero();
+	
+	
+	}
 
 
 	
@@ -109,6 +123,7 @@ update_status PhysBody::PreUpdate(float dt)
 update_status PhysBody::PostUpdate(float dt)
 {
 
+	
 
 	return UPDATE_CONTINUE;
 }

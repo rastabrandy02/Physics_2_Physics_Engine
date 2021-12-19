@@ -46,6 +46,7 @@ public:
 	p2Point<float> position;
 	p2Point<float> velocity;
 	p2Point<float> acceleration;
+	bool isStatic = false;
 
 
 };

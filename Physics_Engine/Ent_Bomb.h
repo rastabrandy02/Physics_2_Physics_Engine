@@ -6,11 +6,11 @@
 #include "p2Point.h"
 #include "ModulePhysics.h"
 
-class Proj_Bomb : public Module
+class Ent_Bomb : public Module
 {
 public:
-	Proj_Bomb(p2Point<float> startPosition, int damage, PhysBody* b);
-	virtual ~Proj_Bomb();
+	Ent_Bomb(p2Point<float> startPosition, int damage, PhysBody* b);
+	virtual ~Ent_Bomb();
 
 	bool Start();
 	update_status PreUpdate(float dt);

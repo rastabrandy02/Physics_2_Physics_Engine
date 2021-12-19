@@ -6,11 +6,11 @@
 #include "ModulePhysics.h"
 
 
-class Proj_Egg : public Module
+class Ent_Egg : public Module
 {
 public:
-	Proj_Egg(p2Point<float> startPosition, int damage, PhysBody* b);
-	virtual ~Proj_Egg();
+	Ent_Egg(p2Point<float> startPosition, int damage, PhysBody* b);
+	virtual ~Ent_Egg();
 
 	bool Start();
 	update_status PreUpdate(float dt);

@@ -4,8 +4,8 @@
 #include "Globals.h"
 #include "p2Point.h"
 #include "ModulePhysics.h"
-#include "Proj_Egg.h"
-#include "Proj_Bomb.h"
+#include "Ent_Egg.h"
+#include "Ent_Bomb.h"
 
 enum ProjectileType
 {
@@ -14,11 +14,11 @@ enum ProjectileType
 };
 
 
-class ProjectileHandler : public Module
+class EntityHandler : public Module
 {
 public:
-	ProjectileHandler(Application* app, bool start_enabled = true);
-	virtual ~ProjectileHandler();
+	EntityHandler(Application* app, bool start_enabled = true);
+	virtual ~EntityHandler();
 
 	bool Start();
 	update_status PreUpdate(float dt);
@@ -30,8 +30,8 @@ public:
 
 public:
 
-	p2List<Proj_Egg*> eggs;
-	p2List<Proj_Bomb*> bombs;
+	p2List<Ent_Egg*> eggs;
+	p2List<Ent_Bomb*> bombs;
 
 	SDL_Texture* tex_bomb;
 	SDL_Texture* tex_egg;

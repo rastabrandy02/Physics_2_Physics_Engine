@@ -1,10 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
-#include "Proj_Bomb.h"
+#include "Ent_Bomb.h"
 #include "ModulePlayer.h"
 #include "PhysBody.h"
 
-Proj_Bomb::Proj_Bomb(p2Point<float> startPosition, int damage, PhysBody* b) : Module()
+Ent_Bomb::Ent_Bomb(p2Point<float> startPosition, int damage, PhysBody* b) : Module()
 {
 	
 
@@ -20,19 +20,19 @@ Proj_Bomb::Proj_Bomb(p2Point<float> startPosition, int damage, PhysBody* b) : Mo
 
 }
 
-Proj_Bomb::~Proj_Bomb()
+Ent_Bomb::~Ent_Bomb()
 {
 
 }
 
 // Load assets
-bool Proj_Bomb::Start()
+bool Ent_Bomb::Start()
 {
 	return UPDATE_CONTINUE;
 }
 
 // Unload assets
-bool Proj_Bomb::CleanUp()
+bool Ent_Bomb::CleanUp()
 {
 	LOG("Unloading player");
 
@@ -40,17 +40,17 @@ bool Proj_Bomb::CleanUp()
 }
 
 // Update: draw background
-update_status Proj_Bomb::PreUpdate(float dt)
+update_status Ent_Bomb::PreUpdate(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
-update_status Proj_Bomb::Update(float dt)
+update_status Ent_Bomb::Update(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
-update_status Proj_Bomb::PostUpdate(float dt)
+update_status Ent_Bomb::PostUpdate(float dt)
 {
 	App->renderer->Blit(App->projectile_handler->tex_bomb, body->rec.x, body->rec.y, NULL);
 	//SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 90);
