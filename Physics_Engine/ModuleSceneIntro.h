@@ -26,6 +26,8 @@ public:
 
 	bool freeCam = false;
 
+	SDL_Texture* background;
+
 	PhysBody* ground;
 	PhysBody* test01;
 	PhysBody* test02;

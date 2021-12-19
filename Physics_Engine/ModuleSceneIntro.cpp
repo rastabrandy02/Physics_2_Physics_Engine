@@ -49,8 +49,13 @@ bool ModuleSceneIntro::Start()
 	 plantPos.y = SCREEN_HEIGHT - 175;
 	 plant = { plantPos.x, plantPos.y, 10, 75 };*/
 	
+
 	 App->renderer->camera.x = 100;
 	 App->renderer->camera.y = -500;
+
+
+	 background = App->textures->Load("Images/background.png");
+
 	 
 
 	return ret;
@@ -73,7 +78,7 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 }
 update_status ModuleSceneIntro::Update(float dt)
 {
-	
+	App->renderer->Blit(background, 0, 0);
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
 	{
 		p2Point<float> force;
