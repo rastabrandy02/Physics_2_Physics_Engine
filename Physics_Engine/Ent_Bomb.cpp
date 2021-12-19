@@ -43,7 +43,15 @@ update_status Ent_Bomb::PreUpdate(float dt)
 }
 update_status Ent_Bomb::Update(float dt)
 {
+	if (aliveTime <= 0)
+	{
+		App->entity_handler->DeleteEntity(body);
+	}
+	else
+	{
+		aliveTime--;
 
+	}
 	return UPDATE_CONTINUE;
 }
 update_status Ent_Bomb::PostUpdate(float dt)
@@ -57,13 +65,36 @@ update_status Ent_Bomb::PostUpdate(float dt)
 void Ent_Bomb::OnCollision(PhysBody* body1, PhysBody* body2)
 {
 
-	if ((body2->type == BodyType::BODY_RECTANGLE) && body2 != App->player->body && body2->type != BOMB)
+	if ((body2->type == BodyType::BODY_RECTANGLE) &&
+		body2 != App->player->body && body2->type != BOMB)
 	{
 
 		//App->entity_handler->DamageEntity(body2, damage);
+
+		if (body2->e_type == ENEMY_1)
+		{
+			App->entity_handler->DamageEntity(body2, damage);
+		}
+
+
+
 		App->entity_handler->DeleteEntity(body);
 		
 	}
 
+
+
+
 }
 
+
+void Ent_Bomb::DoDamage(int damage)
+{
+	{
+		if (health > 0) health -= damage;
+		if (health < 0) {
+			health = 0;
+			App->entity_handler->DeleteEntity(body);
+		}
+	}
+}

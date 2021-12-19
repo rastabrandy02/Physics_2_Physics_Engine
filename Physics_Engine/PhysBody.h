@@ -55,6 +55,7 @@ public:
 
 	bool pendingToDelete = false;
 	bool isStatic = false;
+	bool onGround = false;
 
 
 };

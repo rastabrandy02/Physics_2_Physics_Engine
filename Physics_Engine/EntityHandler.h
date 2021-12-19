@@ -43,7 +43,8 @@ public:
 	SDL_Texture* tex_bomb;
 
 	SDL_Texture* tex_egg;
-	SDL_Rect rec_egg, rec_goldenEgg;
+	SDL_Texture* tex_golden_egg;
+	SDL_Texture* crow;
 
 	SDL_Texture* tex_pengu;
 	SDL_Texture* tex_cannon;

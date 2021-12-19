@@ -10,6 +10,7 @@ Ent_Enemy_1::Ent_Enemy_1(p2Point<float> startPosition, int damage, PhysBody* b) 
 	this->body = b;
 	body->position = startPosition;
 	this->damage = damage;
+	health = 5;
 }
 
 Ent_Enemy_1::~Ent_Enemy_1()
@@ -39,6 +40,11 @@ update_status Ent_Enemy_1::PreUpdate(float dt)
 update_status Ent_Enemy_1::Update(float dt)
 {
 	
+	
+	if (body->position.y > 3000)
+	{
+		App->entity_handler->DeleteEntity(body);
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -50,6 +56,16 @@ update_status Ent_Enemy_1::PostUpdate(float dt)
 
 void Ent_Enemy_1::OnCollision(PhysBody* body1, PhysBody* body2)
 {
-
+	
 }
 
+void Ent_Enemy_1::DoDamage(int damage)
+{
+	{
+		if (health > 0) health -= damage;
+		if (health < 0) {
+			health = 0;
+			App->entity_handler->DeleteEntity(body);
+		}
+	}
+}

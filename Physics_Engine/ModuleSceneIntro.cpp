@@ -66,9 +66,14 @@ bool ModuleSceneIntro::Start()
 
 
 
-	//p2Point<float> zero(0, 0);
-	//App->entity_handler->CreateEntity(ENEMY_1, 48 * 5, 48 * 9, zero, zero);
+	p2Point<float> zero(0, 0);
+	App->entity_handler->CreateEntity(ENEMY_1, 48 * 8, 48 * 10, zero, zero);
 
+	App->entity_handler->CreateEntity(ENEMY_1, 64 * 22, 64 * 8, zero, zero);
+
+	App->entity_handler->CreateEntity(ENEMY_1, 64 * 40, 64 * 9, zero, zero);
+
+	App->entity_handler->CreateEntity(ENEMY_1, 64 * 46, 64 * 5, zero, zero);
 
 
 
@@ -129,7 +134,7 @@ update_status ModuleSceneIntro::PreUpdate(float dt)
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 	{
 		freeCam = !freeCam;
 	}
@@ -146,7 +151,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		float playerX = App->player->body->position.x;
 		float playerY = App->player->body->position.y;
 
-		int marginX = 48 * 10;
+		int marginX = 64 * 4;
 		int marginY = 48 * 11;
 		
 		//App->renderer->camera.x = -(playerX );
@@ -169,17 +174,12 @@ update_status ModuleSceneIntro::Update(float dt)
 		}
 
 
-		if (playerY >= 30 * 48 - h + marginY)
+		if (playerY >= 15 * 64 - h + marginY)
 		{
-
-			App->renderer->camera.y = -(30 * 48 - (h));
+		
+			App->renderer->camera.y = -(15 * 64 - (h));
 		}
 
-
-		//if (playerX > marginX && playerX < 100 * 48)
-		//{
-		//	App->renderer->camera.x = -playerX * 48 * 1.042f + marginX * 48;
-		//}
 
 
 
@@ -187,25 +187,23 @@ update_status ModuleSceneIntro::Update(float dt)
 	else
 	{
 
-		int cameraSpeed = 10;
-		if ((App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT))
+		int cameraSpeed = 5;
+		if ((App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) && App->renderer->camera.y < 0)
 				App->renderer->camera.y += cameraSpeed;
 			
+		
+		
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT && App->renderer->camera.y - SCREEN_HEIGHT > -15 * 63)
+			App->renderer->camera.y -= cameraSpeed;
+		else
 
-
-		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)	
-				App->renderer->camera.y -= cameraSpeed;
-			
-
-
-
-		if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT))
+		if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) && App->renderer->camera.x < 0)
 				App->renderer->camera.x += cameraSpeed;
 			
 
 
 
-		if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT))
+		if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) && App->renderer->camera.x - SCREEN_WIDTH > -50 * 63)
 				App->renderer->camera.x -= cameraSpeed;
 			
 

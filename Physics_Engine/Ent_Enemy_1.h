@@ -1,4 +1,5 @@
 #pragma once
+#include "Application.h"
 #include "Module.h"
 #include "Animation.h"
 #include "Globals.h"
@@ -25,11 +26,7 @@ public:
 
 	void OnCollision(PhysBody* body1, PhysBody* body2) override;
 
-	void DoDamage(int damage)
-	{
-		if (health > 0) health -= damage;
-		if (health < 0) health = 0;
-	}
+	void DoDamage(int damage);
 
 public:
 

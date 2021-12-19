@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "Application.h"
 #include "Animation.h"
 #include "Globals.h"
 #include "p2Point.h"
@@ -26,11 +27,8 @@ public:
 
 	void OnCollision(PhysBody* body1, PhysBody* body2) override;
 
-	void DoDamage(int damage)
-	{
-		if (health > 0) health -= damage;
-		if (health < 0) health = 0;
-	}
+	void DoDamage(int damage);
+	
 
 public:
 
@@ -38,5 +36,11 @@ public:
 	int health;
 	int damage;
 
+	int time = 90;
+	bool birdTime = false;
+	int throws = 8;
+
+
+	int aliveTime = 60 * 30;
 
 };

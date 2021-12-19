@@ -44,6 +44,12 @@ public:
 
 	int weaponNumber = 0;
 
+	SDL_Texture* UI;
+
+
+	int shootTimer = 90;
+	int shootTime = 0;
+
 
 
 };

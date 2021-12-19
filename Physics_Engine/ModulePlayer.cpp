@@ -17,7 +17,7 @@ bool ModulePlayer::Start()
 	body = new PhysBody(BODY_RECTANGLE);
 	App->physics->bodies.add(body);
 	body->position.x = 48 * 3;
-	body->position.y = 48 * 5;
+	body->position.y = 48 * 10;
 	startPos = body->position;
 
 
@@ -29,6 +29,7 @@ bool ModulePlayer::Start()
 
 	tex_player = App->textures->Load("Assets/images/worm.png");
 	Arrow = App->textures->Load("Assets/images/arrow.png");
+	UI = App->textures->Load("Assets/images/UI.png");
 	angle = 0;
 
 	return true;
@@ -53,22 +54,26 @@ update_status ModulePlayer::PreUpdate(float dt)
 	{
 		if (fabs(body->velocity.x) < maxVelocity) body->velocity.x -= speed;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		body->velocity.y = 0;
-		body->acceleration.y -= jumpForce;
-		
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && body->onGround)
+	//{
+	//	body->velocity.y = 0;
+	//	body->acceleration.y -= jumpForce;
+	//	
+	//}
 
-	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || body->position.y > 3000)
 	{
 		body->position = startPos;
 		body->velocity.SetToZero();
 		body->acceleration.SetToZero();
+
+		App->renderer->camera.x = 0;
+		App->renderer->camera.y = 0;
 	}
 	//560, 750
 	if (body->position.x > 560 && body->position.x < 560 + 74 && body->position.y + body->rec.h / 2 > 750)
 	{
+		body->acceleration.y = 0;
 		p2Point<float> i(0, -40000);
 		body->ApplyImpulse(i);
 	}
@@ -106,18 +111,30 @@ update_status ModulePlayer::Update(float dt)
 		body->position.y + body->velocity.y + App->renderer->camera.y);
 
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 	{
 		weaponNumber--;
-	}if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	}if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
 		weaponNumber++;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+
+	if (shootTime <= 0) shootTime = 0;
+	else
+	{
+		shootTime--;
+
+	}
+
+
+
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && shootTime == 0)
 	{
 
-		int force = 800;
+		
+		shootTime = shootTimer;
 
 		switch (weaponNumber)
 		{
@@ -130,6 +147,7 @@ update_status ModulePlayer::Update(float dt)
 		break;
 		case 0:
 		{
+			int force = 900;
 			p2Point<float> projAcc(0, 0);
 			p2Point<float> projVel(force * cos(angle * PI / 180), force * sin(angle * PI / 180));
 			App->entity_handler->CreateEntity(BOMB, body->position.x + 20, body->position.y - 20, projAcc, projVel);
@@ -139,6 +157,7 @@ update_status ModulePlayer::Update(float dt)
 		break;
 		case 1:
 		{
+			int force = 400;
 			p2Point<float> projAcc(0, 0);
 			p2Point<float> projVel(force * cos(angle * PI / 180), force * sin(angle * PI / 180));
 			App->entity_handler->CreateEntity(EGG, body->position.x + 20, body->position.y - 20, projAcc, projVel);
@@ -159,7 +178,7 @@ update_status ModulePlayer::Update(float dt)
 		}
 
 	}
-	LOG("%i", weaponNumber);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -176,6 +195,15 @@ update_status ModulePlayer::PostUpdate(float dt)
 		- 50,
 		6
 	);
+
+
+	int pos_x = 350;
+	int pos_y = 35;
+
+
+
+
+
 	switch (weaponNumber)
 	{
 	case -1:
@@ -186,13 +214,22 @@ update_status ModulePlayer::PostUpdate(float dt)
 	}
 	case 0:
 	{
-	
-		App->renderer->Blit(App->entity_handler->tex_bomb, 100, 100, NULL, 0);
+		SDL_Rect r = { 0 };
+		SDL_QueryTexture(App->entity_handler->tex_bomb, NULL, NULL, &r.w, &r.h);
+		r.w *= 3;
+		r.h *= 3;
+
+		App->renderer->Blit(App->entity_handler->tex_bomb, pos_x, pos_y, &r, 0);
 	}
 	break;
 	case 1:
 	{
-		App->renderer->Blit(App->entity_handler->tex_egg, 100, 100, &App->entity_handler->rec_egg, 0);
+		SDL_Rect r = { 0 };
+		SDL_QueryTexture(App->entity_handler->tex_egg, NULL, NULL, &r.w, &r.h);
+		r.w *= 3;
+		r.h *= 3;
+
+		App->renderer->Blit(App->entity_handler->tex_egg, pos_x, pos_y, &r, 0);
 
 	}
 	break;
@@ -208,6 +245,9 @@ update_status ModulePlayer::PostUpdate(float dt)
 		break;
 	}
 	
+	App->renderer->Blit(UI, 0, 0, NULL,0);
+
+
 	return UPDATE_CONTINUE;
 }
 

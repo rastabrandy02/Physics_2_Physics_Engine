@@ -266,10 +266,17 @@ update_status ModulePhysics::PreUpdate(float dt)
 							
 
 							if (onTop)
+							{
 								item->data->ComputeFriction(item->data->frictionCoeff);
+								
+							}
 							else
+							{
 								item->data->ComputeFriction(airFriction);
+								
+							}
 
+							
 
 							
 							//if (((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2) &&

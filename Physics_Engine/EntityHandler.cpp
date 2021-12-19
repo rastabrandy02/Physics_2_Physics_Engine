@@ -16,8 +16,8 @@ bool EntityHandler::Start()
 {
 	tex_bomb = App->textures->Load("Assets/images/bomb.png");
 	tex_egg = App->textures->Load("Assets/images/egg.png");
-	rec_egg = { 0,0,16,16 };
-	rec_goldenEgg = { 16,0,16,16 };
+	tex_golden_egg = App->textures->Load("Assets/images/golden_egg.png");
+	crow = App->textures->Load("Assets/images/crow.png");
 
 	tex_pengu = App->textures->Load("Assets/images/pengu.png");
 	tex_cannonBall = App->textures->Load("Assets/images/cannon_ball.png");
@@ -201,7 +201,7 @@ PhysBody* EntityHandler::CreateEntity(EntityType type, float x, float y, p2Point
 	break;
 	case ENEMY_1:
 	{
-		PhysBody* body = App->physics->CreateBody(BODY_RECTANGLE, x, y, 15, 18, 20);
+		PhysBody* body = App->physics->CreateBody(BODY_RECTANGLE, x, y, 35, 50, 20);
 		body->acceleration = startAcc;
 		body->velocity = startVel;
 		body->liftCoeff = 1.f;
