@@ -33,6 +33,8 @@ public:
 	PhysBody* ground;
 	PhysBody* wall_1;
 	PhysBody* wall_2;
+
+	PhysBody* prop;
 	//SDL_Rect ground;
 	SDL_Rect plant;
 	SDL_Texture* meta;

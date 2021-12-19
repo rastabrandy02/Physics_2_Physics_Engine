@@ -33,6 +33,8 @@ bool ModuleSceneIntro::Start()
 	wall_1->isStatic = true;
 	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 9, 48 * 11, 48 * 2, 48 * 8, 0);
 	wall_2->isStatic = true;
+	prop = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 3, 48 * 3, 48, 48, 50);
+
 
 
 	//wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 11, 48 * 9, 48 * 12, 48 * 8, 0);
@@ -188,7 +190,7 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	SDL_Rect groundRect = { 2 * 48,0,12 * 48,2 * 48 };
 
 
-	App->renderer->Blit(terrain, 0, 0, NULL);
+	//App->renderer->Blit(terrain, 0, 0, NULL);
 
 	return UPDATE_CONTINUE;
 }

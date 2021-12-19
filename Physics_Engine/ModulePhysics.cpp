@@ -201,8 +201,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 								if (onTop)
 								{
-									item->data->acceleration.y = -item->data->acceleration.y * 2;
-									pb->data->acceleration.y = pb->data->acceleration.y * 2;
+									item->data->acceleration.y = -gravity * item->data->mass;
+									//item->data->position.y = pb->data->position.y - pb->data->rec.h - item->data->rec.h / 2;
+									pb->data->acceleration.y = 0;
 									
 								}
 								
@@ -419,7 +420,7 @@ update_status ModulePhysics::PostUpdate(float dt)
 			tempRect.y += App->renderer->camera.y;
 
 			SDL_RenderFillRect(App->renderer->renderer, &tempRect);
-			SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 255);
+			SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 100);
 			SDL_RenderDrawPoint(App->renderer->renderer,item->data->position.x + App->renderer->camera.x, item->data->position.y + App->renderer->camera.y);
 		}
 		
