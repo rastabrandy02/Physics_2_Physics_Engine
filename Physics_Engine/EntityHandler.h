@@ -6,8 +6,9 @@
 #include "ModulePhysics.h"
 #include "Ent_Egg.h"
 #include "Ent_Bomb.h"
+#include "Ent_Enemy_1.h"
 
-enum ProjectileType
+enum EntityType
 {
 		BOMB = 0,
 		EGG
@@ -26,7 +27,9 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void CreateProjectile(ProjectileType type, float x, float y , p2Point<float> startAcc, p2Point<float> startVel);
+	void CreateProjectile(EntityType type, float x, float y , p2Point<float> startAcc, p2Point<float> startVel);
+	void CollisionFromBody(PhysBody* myself, PhysBody* other);
+	void DamageEntity(PhysBody* body, int damage);
 
 public:
 

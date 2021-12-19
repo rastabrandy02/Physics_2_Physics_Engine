@@ -12,11 +12,6 @@ Ent_Bomb::Ent_Bomb(p2Point<float> startPosition, int damage, PhysBody* b) : Modu
 	body->position = startPosition;
 
 
-	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
-	body->mass = 100;
-	body->restitutionCoeff = 0.5f;
-	body->liftCoeff = 0.1;
-
 
 }
 
@@ -58,5 +53,8 @@ update_status Ent_Bomb::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void Ent_Bomb::OnCollision(PhysBody* body1, PhysBody* body2)
+{
 
+}
 

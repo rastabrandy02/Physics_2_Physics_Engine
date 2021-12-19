@@ -6,12 +6,11 @@
 #include "ModulePhysics.h"
 #include "EntityHandler.h"
 
-
-class Ent_Egg : public Module
+class Ent_Enemy_1 : public Module
 {
 public:
-	Ent_Egg(p2Point<float> startPosition, int damage, PhysBody* b);
-	virtual ~Ent_Egg();
+	Ent_Enemy_1(p2Point<float> startPosition, int damage, PhysBody* b);
+	virtual ~Ent_Enemy_1();
 
 	bool Start();
 	update_status PreUpdate(float dt);

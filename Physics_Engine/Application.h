@@ -15,6 +15,7 @@
 #include "EntityHandler.h"
 #include "Ent_Bomb.h"
 #include "Ent_Egg.h"
+#include "Ent_Enemy_1.h"
 #include "Timer.h"
 #include "PerfTimer.h"
 
@@ -32,6 +33,7 @@ public:
 	EntityHandler* projectile_handler;
 	Ent_Bomb* bomb;
 	Ent_Egg* egg;
+	Ent_Enemy_1* ent_enemy_1;
 	
 
 private:

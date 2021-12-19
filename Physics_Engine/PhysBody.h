@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Globals.h"
 #include "Module.h"
+#include "EntityHandler.h"
 
 enum BodyType
 {
@@ -37,11 +38,15 @@ public:
 		
 	}
 
+
+	
+
 	int mass;
 	float restitutionCoeff;
 	float liftCoeff;
 
 	BodyType type;
+	EntityType e_type;
 	SDL_Rect rec;
 	p2Point<float> position;
 	p2Point<float> velocity;

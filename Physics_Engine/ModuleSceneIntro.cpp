@@ -21,18 +21,19 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	terrain = App->textures->Load("Assets/terrain.png");
-	meta = App->textures->Load("Assets/meta.png");
+	terrain = App->textures->Load("Assets/images/terrain.png");
+	meta = App->textures->Load("Assets/images/meta.png");
 
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
-	ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48, 48 * 16, 48 * 12, 48 * 2, 0);
+	ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48, 48 * 16, 48 * 10, 48 * 2, 0);
 	ground->isStatic = true;
 	wall_1 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 0, 0, 48, 48 * 16, 0);
 	wall_1->isStatic = true;
-	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 3, 48 * 15, 48, 48 , 1000);
-	wall_2->isStatic = false;
+	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 9, 48 * 11, 48 * 2, 48 * 8, 0);
+	wall_2->isStatic = true;
+
 
 	//wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 11, 48 * 9, 48 * 12, 48 * 8, 0);
 	//wall_2->isStatic = true;
@@ -108,7 +109,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		float playerY = App->player->body->position.y;
 
 		int marginX = 48 * 10;
-		int marginY = 48 * 12;
+		int marginY = 48 * 11;
 		
 		//App->renderer->camera.x = -(playerX );
 
@@ -187,7 +188,7 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 	SDL_Rect groundRect = { 2 * 48,0,12 * 48,2 * 48 };
 
 
-	//App->renderer->Blit(terrain, 0, 0, NULL);
+	App->renderer->Blit(terrain, 0, 0, NULL);
 
 	return UPDATE_CONTINUE;
 }

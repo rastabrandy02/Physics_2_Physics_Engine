@@ -80,6 +80,9 @@
     <ClInclude Include="EntityHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ent_Enemy_1.h">
+      <Filter>Header Files\Projectile types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -132,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="EntityHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ent_Enemy_1.cpp">
+      <Filter>Header Files\Projectile types</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

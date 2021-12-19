@@ -16,14 +16,14 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 	body = new PhysBody(BODY_RECTANGLE);
 	App->physics->bodies.add(body);
-	body->position.x = 48;
+	body->position.x = 48 * 3;
 	body->position.y = 48 * -5;
 	body->rec = { ((int)body->position.x - 25),((int)body->position.y - 25), 50, 50 };
 	body->mass = 100;
 	body->restitutionCoeff = 1.f;
 	body->liftCoeff = 0.2f;
 
-	tex_player = App->textures->Load("Assets/worm.png");
+	tex_player = App->textures->Load("Assets/images/worm.png");
 
 	return true;
 }
@@ -80,7 +80,7 @@ update_status ModulePlayer::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
 		p2Point<float> projAcc(0, 0);
-		p2Point<float> projVel(100, -500);
+		p2Point<float> projVel(200, -500);
 		App->projectile_handler->CreateProjectile(BOMB, body->position.x + 20, body->position.y - 20, projAcc, projVel);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)

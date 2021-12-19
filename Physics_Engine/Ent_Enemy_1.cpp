@@ -1,10 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModulePlayer.h"
-#include "Ent_Egg.h"
+#include "Ent_Enemy_1.h"
 #include "PhysBody.h"
 
-Ent_Egg::Ent_Egg(p2Point<float> startPosition, int damage, PhysBody* b) : Module()
+Ent_Enemy_1::Ent_Enemy_1(p2Point<float> startPosition, int damage, PhysBody* b) : Module()
 {
 
 	this->body = b;
@@ -12,18 +12,18 @@ Ent_Egg::Ent_Egg(p2Point<float> startPosition, int damage, PhysBody* b) : Module
 
 }
 
-Ent_Egg::~Ent_Egg()
+Ent_Enemy_1::~Ent_Enemy_1()
 {}
 
 // Load assets
-bool Ent_Egg::Start()
+bool Ent_Enemy_1::Start()
 {
 
 	return UPDATE_CONTINUE;
 }
 
 // Unload assets
-bool Ent_Egg::CleanUp()
+bool Ent_Enemy_1::CleanUp()
 {
 	LOG("Unloading player");
 
@@ -31,27 +31,25 @@ bool Ent_Egg::CleanUp()
 }
 
 // Update: draw background
-update_status Ent_Egg::PreUpdate(float dt)
+update_status Ent_Enemy_1::PreUpdate(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
-update_status Ent_Egg::Update(float dt)
+update_status Ent_Enemy_1::Update(float dt)
 {
 	
 
 	return UPDATE_CONTINUE;
 }
-update_status Ent_Egg::PostUpdate(float dt)
+update_status Ent_Enemy_1::PostUpdate(float dt)
 {
 	App->renderer->Blit(App->projectile_handler->tex_egg, body->rec.x, body->rec.y, NULL);
 	return UPDATE_CONTINUE;
 }
 
-
-
-
-void Ent_Egg::OnCollision(PhysBody* body1, PhysBody* body2)
+void Ent_Enemy_1::OnCollision(PhysBody* body1, PhysBody* body2)
 {
 
 }
+

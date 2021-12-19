@@ -201,8 +201,8 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 								if (onTop)
 								{
-									item->data->acceleration.y = -item->data->acceleration.y;
-									pb->data->acceleration.y = -pb->data->acceleration.y;
+									item->data->acceleration.y = -item->data->acceleration.y * 2;
+									pb->data->acceleration.y = pb->data->acceleration.y * 2;
 									
 								}
 								
@@ -449,7 +449,7 @@ PhysBody* ModulePhysics::CreateBody(BodyType type, int x, int y, int w, int h, i
 	b->velocity.x = 0;
 	b->velocity.y = 0;
 	b->rec = { (int)b->position.x - w/2,(int)b->position.y - h/2, w, h }; 
-	b->mass = 30;
+	b->mass = mass;
 	b->restitutionCoeff = 0;
 	b->liftCoeff = 0;
 	bodies.add(b);

@@ -14,8 +14,8 @@ EntityHandler::~EntityHandler()
 // Load assets
 bool EntityHandler::Start()
 {
-	tex_bomb = App->textures->Load("Assets/bomb.png");
-	tex_egg = App->textures->Load("Assets/egg.png");
+	tex_bomb = App->textures->Load("Assets/images/bomb.png");
+	tex_egg = App->textures->Load("Assets/images/egg.png");
 
 	return UPDATE_CONTINUE;
 }
@@ -113,49 +113,79 @@ update_status EntityHandler::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void EntityHandler::CreateProjectile(ProjectileType type, float x, float y, p2Point<float> startAcc, p2Point<float> startVel)
+void EntityHandler::CreateProjectile(EntityType type, float x, float y, p2Point<float> startAcc, p2Point<float> startVel)
 {
 
 	switch (type)
 	{
 	case BOMB:
 	{
-		PhysBody* body = new PhysBody();
-		p2Point<float> pos;
-		pos.x = x;
-		pos.y = y;
-		Ent_Bomb* newBomb = new Ent_Bomb(pos, 10, body);
-		newBomb->App = App;
+		PhysBody* body = App->physics->CreateBody(BodyType::BODY_RECTANGLE, x, y, 14, 14, 30);
 		body->acceleration = startAcc;
 		body->velocity = startVel;
-		body->rec.w = 14;
-		body->rec.h = 14;
+		
+
+
+		Ent_Bomb* newBomb = new Ent_Bomb(body->position, 10, body);
+		newBomb->App = App;
 		bombs.add(newBomb);
-		App->physics->bodies.add(body);
+
 		newBomb->Start();
 	}
 	break;
+
 	case EGG:
 	{
-		PhysBody* body = new PhysBody();
-		p2Point<float> pos;
-		pos.x = x;
-		pos.y = y;
-		Ent_Egg* newEgg = new Ent_Egg(pos, 10, body);
-		newEgg->App = App;
+		PhysBody* body = App->physics->CreateBody(BODY_RECTANGLE, x, y, 15, 18, 20);
 		body->acceleration = startAcc;
 		body->velocity = startVel;
-		body->rec.w = 15;
-		body->rec.h = 18;
+		body->liftCoeff = 1.f;
 
+		Ent_Egg* newEgg = new Ent_Egg(body->position, 10, body);
+		newEgg->App = App;
 		eggs.add(newEgg);
-		App->physics->bodies.add(body);
+		
 		newEgg->Start();
 	}
 	break;
 	default:
 		break;
 	}
+
+}
+
+
+
+void EntityHandler::CollisionFromBody(PhysBody* myself, PhysBody* other) 
+{
+
+	bool cont = false;
+
+	for (int i = 0; i < eggs.count() && cont; i++)
+	{
+
+		Ent_Egg* iteratorEggs;
+		eggs.at(i, iteratorEggs);
+
+		if (myself == iteratorEggs->body)
+		{
+			cont = true;
+			iteratorEggs->OnCollision(myself, other);
+		}
+	}
+
+	for (int i = 0; i < bombs.count() && cont; i++)
+	{
+
+		Ent_Bomb* iteratorBombs;
+		bombs.at(i, iteratorBombs);
+
+		iteratorBombs->OnCollision(myself, other);
+	}
+}
+
+void EntityHandler::DamageEntity(PhysBody* body, int damage)
+{
 
 }
 

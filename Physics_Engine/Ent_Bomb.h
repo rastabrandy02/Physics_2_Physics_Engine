@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "p2Point.h"
 #include "ModulePhysics.h"
+#include "EntityHandler.h"
 
 class Ent_Bomb : public Module
 {
@@ -22,6 +23,8 @@ public:
 	{
 		return body;
 	}
+
+	void OnCollision(PhysBody* body1, PhysBody* body2) override;
 
 public:
 

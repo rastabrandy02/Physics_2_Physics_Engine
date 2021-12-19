@@ -34,6 +34,6 @@ private:
 	p2Point<float> totalMomentum;
 
 	float groundFriction = 1.f;
-	float airFriction = 0.3f;
+	float airFriction = 0.7f;
 	
 };
