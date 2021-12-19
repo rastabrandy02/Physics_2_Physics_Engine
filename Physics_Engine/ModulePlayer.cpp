@@ -56,12 +56,12 @@ update_status ModulePlayer::PreUpdate(float dt)
 	{
 		if (fabs(body->velocity.x) < maxVelocity) body->velocity.x -= speed;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		body->velocity.y = 0;
-		body->acceleration.y -= jumpForce;
-		
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	//{
+	//	body->velocity.y = 0;
+	//	body->acceleration.y -= jumpForce;
+	//	
+	//}
 
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || body->position.y > 3000)
 	{
@@ -132,7 +132,7 @@ update_status ModulePlayer::Update(float dt)
 
 
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && shootTime == 0 && pos0 > -SCREEN_WIDTH)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && shootTime == 0 && pos0 > -SCREEN_WIDTH)
 	{
 
 		
