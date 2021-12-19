@@ -38,6 +38,8 @@ public:
 	//SDL_Rect ground;
 	SDL_Rect plant;
 	SDL_Texture* meta;
+	SDL_Texture* bar;
+	SDL_Texture* barBG;
 
 	p2Point <int> plantPos;
 };

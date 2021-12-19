@@ -107,6 +107,8 @@ bool ModuleSceneIntro::Start()
 
 	background = App->textures->Load("Assets/images/background.png");
 	bumper = App->textures->Load("Assets/images/bumper.png");
+	bar = App->textures->Load("Assets/images/time_bar.png");
+	barBG = App->textures->Load("Assets/images/timer_bar_bg.png");
 
 	 App->renderer->camera.x = 0;
 	 App->renderer->camera.y = 0;

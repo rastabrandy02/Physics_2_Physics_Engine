@@ -30,8 +30,10 @@ bool ModulePlayer::Start()
 	tex_player = App->textures->Load("Assets/images/worm.png");
 	Arrow = App->textures->Load("Assets/images/arrow.png");
 	UI = App->textures->Load("Assets/images/UI.png");
+	win = App->textures->Load("Assets/images/win.png");
+	lose = App->textures->Load("Assets/images/lose.png");
 	angle = 0;
-
+	bar_v = SCREEN_WIDTH / gameTime;
 	return true;
 }
 
@@ -46,20 +48,20 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::PreUpdate(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && pos0 > -SCREEN_WIDTH)
 	{
 		if (fabs(body->velocity.x) < maxVelocity) body->velocity.x += speed;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && pos0 > -SCREEN_WIDTH)
 	{
 		if (fabs(body->velocity.x) < maxVelocity) body->velocity.x -= speed;
 	}
-	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && body->onGround)
-	//{
-	//	body->velocity.y = 0;
-	//	body->acceleration.y -= jumpForce;
-	//	
-	//}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		body->velocity.y = 0;
+		body->acceleration.y -= jumpForce;
+		
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || body->position.y > 3000)
 	{
@@ -130,7 +132,7 @@ update_status ModulePlayer::Update(float dt)
 
 
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && shootTime == 0)
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN && shootTime == 0 && pos0 > -SCREEN_WIDTH)
 	{
 
 		
@@ -245,7 +247,25 @@ update_status ModulePlayer::PostUpdate(float dt)
 		break;
 	}
 	
+	pos0 -= bar_v;
+	LOG("pos %i", gameTime);
 	App->renderer->Blit(UI, 0, 0, NULL,0);
+	App->renderer->Blit(App->scene_intro->barBG, 0, 0, NULL, 0);
+	App->renderer->Blit(App->scene_intro->bar, pos0, 0, NULL, 0);
+
+
+	if (App->entity_handler->enemy_1.count() == 0)
+	{
+		App->renderer->Blit(win, SCREEN_WIDTH / 2 - 208, 150, NULL, 0);
+		bar_v = 0;
+		
+
+	}
+	else if (pos0 < -SCREEN_WIDTH)
+	{
+		App->renderer->Blit(lose, SCREEN_WIDTH / 2 - 430,  150, NULL, 0);
+
+	}
 
 
 	return UPDATE_CONTINUE;

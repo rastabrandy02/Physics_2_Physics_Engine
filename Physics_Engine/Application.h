@@ -35,7 +35,7 @@ public:
 	Ent_Egg* egg;
 	Ent_Enemy_1* ent_enemy_1;
 	
-
+	float dt = 0.0f;
 private:
 
 	p2List<Module*> list_modules;
@@ -55,7 +55,7 @@ private:
 	uint32 maxFrameRate = 60;
 
 	float averageFps = 0.0f;
-	float dt = 0.0f;
+	
 	
 	
 

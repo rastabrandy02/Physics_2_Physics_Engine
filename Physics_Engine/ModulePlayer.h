@@ -50,6 +50,13 @@ public:
 	int shootTimer = 90;
 	int shootTime = 0;
 
+	float gameTime = 60 * 60 * 2;
+	float pos0 = 0;
+	float bar_v = SCREEN_WIDTH / gameTime;
+
+	SDL_Texture* win;
+	SDL_Texture* lose;
+
 
 
 };
