@@ -34,64 +34,64 @@ update_status ModulePhysics::PreUpdate(float dt)
 
 
 		//---Gravity---
-		if (item->data->type != BODY_GROUND)
-		{
+		
 			//LOG("v %f", App->player->body->position.x);
 			//LOG("acc %f", App->player->body->acceleration.x);
 			
 			if (!item->data->isStatic) 
 				item->data->ComputeKinematics(dt);
-
+		
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			
-
-			if (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h / 2 <= 2)
-			{
-				hasTouchedFloor = true;
-				onGround = true;
-			}
-
-			if (onGround)
-				item->data->ComputeFriction(groundFriction);
-			else
-				item->data->ComputeFriction(airFriction);
-
-			//LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
-			//LOG("dist %i", item->data->rec.h);
-
-			if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
-			{
-				
-				if (hasTouchedFloor)
-				{
-					
-					while ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
-					{
-						item->data->position.y--;
-					}
-					while ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
-					{
-						item->data->position.y++;
-					}
-				
-				}
-
-				item->data->acceleration.y -= item->data->acceleration.y;
-				item->data->velocity.y = 0.0f;
-			}
-			else
-			{
-				if (!item->data->isStatic) 
-					item->data->acceleration.y = gravity * item->data->mass;
-			}
-		}
+			if (!item->data->isStatic)
+				item->data->acceleration.y = gravity * item->data->mass;
+			//if (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h / 2 <= 2)
+			//{
+			//	hasTouchedFloor = true;
+			//	onGround = true;
+			//}
+			//
+			//if (onGround)
+			//	item->data->ComputeFriction(groundFriction);
+			//else
+			//	item->data->ComputeFriction(airFriction);
+			//
+			////LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
+			////LOG("dist %i", item->data->rec.h);
+			//
+			//if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+			//{
+			//	
+			//	if (hasTouchedFloor)
+			//	{
+			//		
+			//		while ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+			//		{
+			//			item->data->position.y--;
+			//		}
+			//		while ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
+			//		{
+			//			item->data->position.y++;
+			//		}
+			//	
+			//	}
+			//
+			//	item->data->acceleration.y -= item->data->acceleration.y;
+			//	item->data->velocity.y = 0.0f;
+			//}
+			//else
+			//{
+			//	if (!item->data->isStatic) 
+			//		item->data->acceleration.y = gravity * item->data->mass;
+			//}
+		
 
 
 
 
 		//---Collisions---
 		
-		bool ontTop = false;
+		bool onTop = false;
 		switch (item->data->type)
 		{
 
@@ -135,7 +135,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									distY = (fabs(pb->data->position.y - item->data->position.y));
 									float temp = item->data->rec.h / 2 + pb->data->rec.h / 2;
-									ontTop = true;
+									onTop = true;
 
 									if (!(distY < temp))
 										break;
@@ -156,14 +156,14 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 									distY = fabs(item->data->position.y - pb->data->position.y);
 									float temp = item->data->rec.h / 2 + pb->data->rec.h / 2;
-									ontTop = true;
+									onTop = true;
 
 									if (!(distY < temp))
 										break;
 								}
 								
-								LOG("on top: %i", ontTop);
-								while (item->data->position.x < pb->data->position.x && !ontTop)
+								LOG("on top: %i", onTop);
+								while (item->data->position.x < pb->data->position.x && !onTop)
 								{
 									double item_temp;
 									float item_remnant = modf(item->data->position.x, &item_temp);
@@ -181,7 +181,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 								}
 								
 								
-								while (item->data->position.x > pb->data->position.x && !ontTop)
+								while (item->data->position.x > pb->data->position.x && !onTop)
 								{
 									double item_temp;
 									float item_remnant = modf(item->data->position.x, &item_temp);
@@ -199,16 +199,22 @@ update_status ModulePhysics::PreUpdate(float dt)
 								}
 
 								
-								if (ontTop)
+								if (onTop)
 								{
 									item->data->acceleration.y = -item->data->acceleration.y;
 									pb->data->acceleration.y = -pb->data->acceleration.y;
+									
 								}
 								
 							}
 
+							if (onTop)
+								item->data->ComputeFriction(groundFriction);
+							else
+								item->data->ComputeFriction(airFriction);
 
 
+							
 							//if (((item->data->position.y - item->data->rec.h / 2 < pb->data->position.y + pb->data->rec.h / 2) &&
 							//	(item->data->position.y + item->data->rec.h / 2 > pb->data->position.y - pb->data->rec.h / 2) &&
 							//	(item->data->position.x - item->data->rec.w / 2 < pb->data->position.x + pb->data->rec.w / 2) &&
@@ -369,6 +375,9 @@ update_status ModulePhysics::PreUpdate(float dt)
 									}
 									//pb->data->ComputeKinematics(dt);
 								}
+							
+								
+							
 							}
 							break;
 							
@@ -377,6 +386,8 @@ update_status ModulePhysics::PreUpdate(float dt)
 						default:
 							break;
 					}
+
+					onTop = false;
 				}
 				break;
 			}

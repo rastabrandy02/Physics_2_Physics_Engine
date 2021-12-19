@@ -53,9 +53,9 @@ update_status ModulePlayer::PreUpdate(float dt)
 		body->acceleration.y -= jumpForce;
 		
 	}
-	LOG("v %f", body->velocity.y);
-	LOG("a %f", body->acceleration.y);
-	LOG("pos %f, %f", body->position.x, body->position.y);
+	//LOG("v %f", body->velocity.y);
+	//LOG("a %f", body->acceleration.y);
+	//LOG("pos %f, %f", body->position.x, body->position.y);
 	
 	return UPDATE_CONTINUE;
 }
@@ -69,10 +69,10 @@ update_status ModulePlayer::Update(float dt)
 
 	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(App->renderer->renderer,
-		body->position.x + t,
-		body->position.y,
-		body->position.x + body->velocity.x + t,
-		body->position.y + body->velocity.y);
+		body->position.x + t + App->renderer->camera.x,
+		body->position.y + App->renderer->camera.y,
+		body->position.x + body->velocity.x + t + App->renderer->camera.x,
+		body->position.y + body->velocity.y + App->renderer->camera.y);
 
 
 	
@@ -95,8 +95,6 @@ update_status ModulePlayer::Update(float dt)
 }
 update_status ModulePlayer::PostUpdate(float dt)
 {
-	SDL_SetRenderDrawColor(App->renderer->renderer, 255, 0, 0, 255);
-	SDL_RenderFillRect(App->renderer->renderer, &body->rec);
 
 	App->renderer->Blit(tex_player, body->position.x - 15, body->position.y - 10, NULL);
 	

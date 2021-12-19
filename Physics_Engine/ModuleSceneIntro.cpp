@@ -27,11 +27,12 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 	
-	ground = App->physics->CreateBody(BodyType::BODY_GROUND, 48, 48 * 16, 48 * 12, 48 * 2, 0);
-
+	ground = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48, 48 * 16, 48 * 12, 48 * 2, 0);
+	ground->isStatic = true;
 	wall_1 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 0, 0, 48, 48 * 16, 0);
 	wall_1->isStatic = true;
-	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 3, 0, 48, 48 , 50);
+	wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 3, 48 * 15, 48, 48 , 1000);
+	wall_2->isStatic = false;
 
 	//wall_2 = App->physics->CreateBody(BodyType::BODY_RECTANGLE, 48 * 11, 48 * 9, 48 * 12, 48 * 8, 0);
 	//wall_2->isStatic = true;
@@ -185,11 +186,8 @@ update_status ModuleSceneIntro::PostUpdate(float dt)
 
 	SDL_Rect groundRect = { 2 * 48,0,12 * 48,2 * 48 };
 
-	
-	App->renderer->Blit(meta, ground->rec.x, ground->rec.y, &groundRect);
 
-
-	App->renderer->Blit(terrain, 0, 0, NULL);
+	//App->renderer->Blit(terrain, 0, 0, NULL);
 
 	return UPDATE_CONTINUE;
 }
