@@ -29,62 +29,71 @@ update_status ModulePhysics::PreUpdate(float dt)
 {
 	for (p2List_item<PhysBody*>* item = bodies.getFirst(); item; item = item->next)
 	{
+		int collisionsAttempts = 0;
 		bool hasTouchedFloor = false;
 		bool onGround = false;
 
-
-		//---Gravity---
-		
-			//LOG("v %f", App->player->body->position.x);
-			//LOG("acc %f", App->player->body->acceleration.x);
+		if (!item->data->isStatic)
+			item->data->ComputeKinematics(dt);
 			
-			if (!item->data->isStatic) 
-				item->data->ComputeKinematics(dt);
-		
 			item->data->LimitSpeed(speedLimit.x, speedLimit.y);
 			
 			if (!item->data->isStatic)
 				item->data->acceleration.y = gravity * item->data->mass;
-			//if (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h / 2 <= 2)
-			//{
-			//	hasTouchedFloor = true;
-			//	onGround = true;
-			//}
-			//
-			//if (onGround)
-			//	item->data->ComputeFriction(groundFriction);
-			//else
-			//	item->data->ComputeFriction(airFriction);
-			//
-			////LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
-			////LOG("dist %i", item->data->rec.h);
-			//
-			//if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
-			//{
-			//	
-			//	if (hasTouchedFloor)
-			//	{
-			//		
-			//		while ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
-			//		{
-			//			item->data->position.y--;
-			//		}
-			//		while ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
-			//		{
-			//			item->data->position.y++;
-			//		}
-			//	
-			//	}
-			//
-			//	item->data->acceleration.y -= item->data->acceleration.y;
-			//	item->data->velocity.y = 0.0f;
-			//}
-			//else
-			//{
-			//	if (!item->data->isStatic) 
-			//		item->data->acceleration.y = gravity * item->data->mass;
-			//}
-		
+
+		//---Gravity---
+		//if (item->data != App->scene_intro->ground)
+		//{
+		//	//LOG("v %f", App->player->body->position.x);
+		//	//LOG("acc %f", App->player->body->acceleration.x);
+		//
+		//	if (!item->data->isStatic)
+		//		item->data->ComputeKinematics(dt);
+		//
+		//	item->data->LimitSpeed(speedLimit.x, speedLimit.y);
+		//
+		//	if (!item->data->isStatic)
+		//		item->data->acceleration.y = gravity * item->data->mass;
+		//	if (App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h / 2 <= 2)
+		//	{
+		//		hasTouchedFloor = true;
+		//		onGround = true;
+		//	}
+		//
+		//	if (onGround)
+		//		item->data->ComputeFriction(groundFriction);
+		//	else
+		//		item->data->ComputeFriction(airFriction);
+		//
+		//	//LOG("dist %f", App->scene_intro->ground->rec.y - item->data->position.y - item->data->rec.h/2);
+		//	//LOG("dist %i", item->data->rec.h);
+		//
+		//	if ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+		//	{
+		//
+		//		if (hasTouchedFloor)
+		//		{
+		//
+		//			while ((item->data->position.y + item->data->rec.h / 2) > App->scene_intro->ground->rec.y)
+		//			{
+		//				item->data->position.y--;
+		//			}
+		//			while ((item->data->position.y + item->data->rec.h / 2) < App->scene_intro->ground->rec.y)
+		//			{
+		//				item->data->position.y++;
+		//			}
+		//
+		//		}
+		//
+		//		item->data->acceleration.y =0 ;
+		//		item->data->velocity.y = 0.0f;
+		//	}
+		//	else
+		//	{
+		//		if (!item->data->isStatic)
+		//			item->data->acceleration.y = gravity * item->data->mass;
+		//	}
+		//}
 
 
 
@@ -116,7 +125,7 @@ update_status ModulePhysics::PreUpdate(float dt)
 							
 							while (distY < item->data->rec.h / 2 + pb->data->rec.h / 2 &&
 								distX < item->data->rec.w /2 + pb->data->rec.w / 2 && 
-								!item->data->isStatic)
+								!item->data->isStatic && collisionsAttempts < maxCollisionAttempts)
 							{
 								LOG("%i", (item->data->position.y < pb->data->position.y));
 
@@ -201,12 +210,13 @@ update_status ModulePhysics::PreUpdate(float dt)
 								
 								if (onTop)
 								{
-									item->data->acceleration.y = -gravity * item->data->mass;
+									item->data->acceleration.y = -item->data->acceleration.y;
 									//item->data->position.y = pb->data->position.y - pb->data->rec.h - item->data->rec.h / 2;
-									pb->data->acceleration.y = 0;
+									pb->data->acceleration.y = -pb->data->acceleration.y;
 									
 								}
 								
+								collisionsAttempts++;
 							}
 
 							if (onTop)

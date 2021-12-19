@@ -35,5 +35,7 @@ private:
 
 	float groundFriction = 1.f;
 	float airFriction = 0.7f;
+
+	float maxCollisionAttempts = 100;
 	
 };
